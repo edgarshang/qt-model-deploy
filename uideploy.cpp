@@ -39,6 +39,7 @@ QWidget& Deploy::uiStackWidgetInit()
 
     QVBoxLayout *configLayout = new QVBoxLayout;
     configLayout->addLayout(pathLayout);
+    configLayout->addStretch(1);
     stackWidgetGroup.setLayout(configLayout);
 
 
@@ -56,6 +57,7 @@ QLayout& Deploy::uiButtonInit()
     buttonLayout.addWidget(openfileButton);
     buttonLayout.addWidget(RunButton);
     buttonLayout.addWidget(ImageFolderButton);
+    buttonLayout.addStretch(1);
 
     return buttonLayout;
 }
@@ -63,6 +65,7 @@ QLayout& Deploy::uiButtonInit()
 QLayout& Deploy::uiShowInit()
 {
     QHBoxLayout *showLayout = new QHBoxLayout;
+    QshowLabel.setMinimumSize(200,200);
     showLayout->addWidget(&QshowLabel);
 
     return *showLayout;
