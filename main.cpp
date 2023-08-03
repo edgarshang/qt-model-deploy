@@ -1,4 +1,4 @@
-#include "deploy.h"
+#include "uideploy.h"
 #include <QApplication>
 #include <opencv2/opencv.hpp>
 #include <inference_engine.hpp>

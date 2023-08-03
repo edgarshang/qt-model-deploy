@@ -25,10 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        deploy.cpp
+    uideploy.cpp
 
 HEADERS += \
-        deploy.h
+    uideploy.h
 
 INCLUDEPATH += $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include\opencv2) \
