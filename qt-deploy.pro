@@ -25,10 +25,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    uideploy.cpp
+    uideploy.cpp \
+    ort_tutorial.cpp \
+    common_api.cpp
 
 HEADERS += \
-    uideploy.h
+    uideploy.h \
+    ort_tutorial.h \
+    common_api.h
 
 INCLUDEPATH += $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include\opencv2) \
@@ -57,7 +61,7 @@ LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\deployment_to
         -linference_engine_c_api \
         -linference_engine_transformations
 
-LIBS += -LD:\project\onnxruntime-win-x64-1.13.1\lib \
+LIBS += -L$$quote(D:\project\onnxruntime-win-x64-1.13.1\lib) \
         -lonnxruntime \
         -lonnxruntime_providers_shared
 

@@ -14,13 +14,18 @@
 
 #include <QWidget>
 
-class Deploy : public QWidget
+#include "common_api.h"
+
+class Deploy : public QWidget, public Show
 {
     Q_OBJECT
 
 public:
     Deploy(QWidget *parent = 0);
     ~Deploy();
+
+public:
+    virtual void imageshow(cv::Mat &image);
 
 
 public:

@@ -1,4 +1,5 @@
 #include "uideploy.h"
+#include <QImage>
 
 Deploy::Deploy(QWidget *parent)
     : QWidget(parent)
@@ -15,6 +16,12 @@ void Deploy::uiInit()
       setLayout(&uilayout);
 }
 
+void Deploy::imageshow(cv::Mat &image)
+{
+    QImage dst(image.data, image.cols, image.rows, image.step, QImage::Format::Format_RGB888);
+    QshowLabel.setPixmap(QPixmap::fromImage(dst.rgbSwapped()));
+}
+
 QWidget& Deploy::uileftModelInit()
 {
     leftModeListWidget.insertItem(0, "YOLOv5");
@@ -22,6 +29,7 @@ QWidget& Deploy::uileftModelInit()
     leftModeListWidget.insertItem(2, "FasterRcnn");
     leftModeListWidget.insertItem(3, "MaskRcnn");
     leftModeListWidget.insertItem(4, "Unet");
+    leftModeListWidget.insertItem(5, "resnet18");
 
     return leftModeListWidget;
 }
