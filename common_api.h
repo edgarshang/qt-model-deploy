@@ -35,11 +35,11 @@ public:
     virtual void processor(modelTypeInfo_ &info) = 0;
 };
 
-//class ModelProcessor
-//{
-//public:
-//    virtual void modelRunner() = 0;
-//}
+class ModelProcessor
+{
+public:
+    virtual void modelRunner() = 0;
+};
 
 
 

@@ -18,6 +18,10 @@ public:
 
 //    ort_tutorial *ort_test;
     std::shared_ptr<ort_tutorial> ort_test;
+    std::shared_ptr<ModelProcessor> modelInference;
+
+protected:
+    void run();
 
 
 

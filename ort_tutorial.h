@@ -9,7 +9,7 @@
 #include <fstream>
 #include "common_api.h"
 
-class ort_tutorial
+class ort_tutorial : public ModelProcessor
 {
 public:
     ort_tutorial(std::string modelPath, std::string imagePath, std::string label_text, std::string modelType);
@@ -22,7 +22,7 @@ public:
     // show
     void set_Show_image(Show *imageShower);
 
-//    virtual void modelRunner();
+    virtual void modelRunner();
 
 private:
     std::string model_path;

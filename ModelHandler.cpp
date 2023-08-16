@@ -5,24 +5,25 @@
 ModelHandler::ModelHandler(Show *imageDisplay)
 {
     display = imageDisplay;
+    connect(this, SIGNAL(finished()), this, SLOT(QObject::deleteLater));
 }
+
 
 void ModelHandler::processor(modelTypeInfo_ &info)
 {
-    qDebug() << "imageProcess...";
-    qDebug() << info.modelType;
+//    qDebug() << "imageProcess...";
+//    qDebug() << info.modelType;
 //    qDebug() << info.deploymode;
-    qDebug() << info.filePath;
+//    qDebug() << info.filePath;
     if( info.deploymode == OnnxRunTime)
     {
         qDebug() << "onnxruntime";
         if( info.modelType == "resnet18")
         {
-//            ort_test = new ort_tutorial("D:/project/ort-deploy/resnet18.onnx", "D:/project/OpenCV/opencv_tutorial_data/images/space_shuttle.jpg", "D:/project/ort-deploy/imagenet_classes.txt","resnet18");
-            ort_test = std::make_shared<ort_tutorial>("D:/project/ort-deploy/resnet18.onnx", "D:/project/OpenCV/opencv_tutorial_data/images/space_shuttle.jpg", "D:/project/ort-deploy/imagenet_classes.txt","resnet18");
+            ort_test = std::make_shared<ort_tutorial>("D:/project/ort-deploy/resnet18.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/imagenet_classes.txt","resnet18");
             ort_test->set_Show_image(display);
-//            modelInference = test;
-            ort_test->process();
+            modelInference = ort_test;
+            this->start();
         }
     }else if (info.deploymode == Openvino)
     {
@@ -30,7 +31,8 @@ void ModelHandler::processor(modelTypeInfo_ &info)
     }
 }
 
-//void ModelHandler::run()
-//{
-
-//}
+void ModelHandler::run()
+{
+     modelInference->modelRunner();
+     qDebug() << "run()...";
+}
