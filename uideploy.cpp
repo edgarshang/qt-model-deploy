@@ -4,6 +4,7 @@
 #include <QString>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSettings>
 
 const char *modetye[] = {"YOLOv5", "YOLOv8", "FasterRcnn", "MaskRcnn", "Unet", "resnet18"};
 
@@ -18,13 +19,17 @@ void Deploy::uiInit()
       uilayout.addWidget(&uileftModelInit());
       uilayout.addWidget(&uiStackWidgetInit());
       uilayout.addLayout(&uiButtonInit());
+      uilayout.addStretch(1);
       uilayout.addLayout(&uiShowInit());
+//      uilayout.addStretch(1);
       setLayout(&uilayout);
+
+      initSetting();
 }
 
 void Deploy::imageshow(cv::Mat &image)
 {
-    QImage dst(image.data, image.cols, image.rows, image.step, QImage::Format::Format_RGB888);
+    QImage dst(image.data, image.cols, image.rows, static_cast<int>(image.step), QImage::Format::Format_RGB888);
     QshowLabel.setPixmap(QPixmap::fromImage(dst.rgbSwapped()));
 }
 
@@ -101,6 +106,8 @@ void Deploy::onPushButtonClick()
                                                                   tr("Images (*.png *.jpg *.png *.mp4)"));
         qDebug() << fileName;
         pathLineEdit->setText(fileName);
+        QSettings initSetting("config.ini", QSettings::IniFormat);
+        initSetting.setValue("/init/path", fileName);
     }else if( text == "Run" )
     {
         modelTypeInfo.filePath = pathLineEdit->text();
@@ -125,10 +132,22 @@ void Deploy::onPushButtonClick()
 
 }
 
+void Deploy::initSetting()
+{
+    QSettings initSetting("config.ini", QSettings::IniFormat);
+    QString imagePath = initSetting.value("/init/path").toString();
+    if( !imagePath.isEmpty())
+    {
+        pathLineEdit->setText(imagePath);
+    }
+}
+
 QLayout& Deploy::uiShowInit()
 {
     QHBoxLayout *showLayout = new QHBoxLayout;
     QshowLabel.setMinimumSize(480,400);
+    QshowLabel.setStyleSheet("QLabel{background-color:rgb(0,0,0);}");
+    QshowLabel.setScaledContents(true);
     showLayout->addWidget(&QshowLabel);
 
     return *showLayout;
@@ -137,10 +156,10 @@ QLayout& Deploy::uiShowInit()
 
 Deploy::~Deploy()
 {
-//    delete openfileButton;
-//    delete RunButton;
-//    delete ImageFolderButton;
-//    delete openfileButton;
-//    delete RunButton;
-//    delete ImageFolderButton;
+    delete openfileButton;
+    delete RunButton;
+    delete pathLineEdit;
+    delete onnxruntimeRadioBtn;
+    delete opvinoRadioBtn;
+
 }

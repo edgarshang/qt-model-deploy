@@ -12,7 +12,7 @@
 class ort_tutorial : public ModelProcessor
 {
 public:
-    ort_tutorial(std::string modelPath, std::string imagePath, std::string label_text, std::string modelType);
+    ort_tutorial(std::string modelPath, std::string imagePath, std::string label_text);
     ~ort_tutorial();
     void get_model_info();
     cv::Mat pre_image_process(cv::Mat &image);
@@ -27,7 +27,6 @@ public:
 private:
     std::string model_path;
     std::string image_path;
-    std::string model_Type;
     std::string label_path;
     std::vector<std::string> labels;
     Ort::SessionOptions session_options;

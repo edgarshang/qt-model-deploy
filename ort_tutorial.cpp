@@ -1,13 +1,10 @@
 #include "ort_tutorial.h"
 
-ort_tutorial::ort_tutorial(std::string modelPath, std::string imagePath, std::string label_text, std::string modelType)
+ort_tutorial::ort_tutorial(std::string modelPath, std::string imagePath, std::string label_text)
 {
     model_path = modelPath;
     image_path = imagePath;
-    model_Type = modelType;
     label_path = label_text;
-
-    std::cout << model_path << std::endl;
 }
 
 
@@ -109,8 +106,8 @@ void ort_tutorial::get_model_info()
     session_ = new Ort::Session(env, w_model_path.c_str(), session_options);
 
 
-    int input_nodes_num = session_->GetInputCount();
-    int output_nodes_num = session_->GetOutputCount();
+    int input_nodes_num = static_cast<int>(session_->GetInputCount());
+    int output_nodes_num = static_cast<int>(session_->GetOutputCount());
 
     for (int i = 0; i < input_nodes_num; i++) {
         auto input_name = session_->GetInputNameAllocated(i, allocator);

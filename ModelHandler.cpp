@@ -5,7 +5,7 @@
 ModelHandler::ModelHandler(Show *imageDisplay)
 {
     display = imageDisplay;
-    connect(this, SIGNAL(finished()), this, SLOT(QObject::deleteLater));
+//    connect(this, SIGNAL(finished()), this, SLOT(QObject::deleteLater));
 }
 
 
@@ -20,7 +20,7 @@ void ModelHandler::processor(modelTypeInfo_ &info)
         qDebug() << "onnxruntime";
         if( info.modelType == "resnet18")
         {
-            ort_test = std::make_shared<ort_tutorial>("D:/project/ort-deploy/resnet18.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/imagenet_classes.txt","resnet18");
+            ort_test = std::make_shared<ort_tutorial>("D:/project/ort-deploy/resnet18.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/imagenet_classes.txt");
             ort_test->set_Show_image(display);
             modelInference = ort_test;
             this->start();

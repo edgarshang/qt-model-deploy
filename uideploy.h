@@ -24,6 +24,7 @@ class Deploy : public QWidget, public Show
 public:
     Deploy(QWidget *parent = 0);
     ~Deploy();
+    void initSetting();
 
 public:
     virtual void imageshow(cv::Mat &image);
