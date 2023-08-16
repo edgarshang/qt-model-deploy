@@ -18,10 +18,11 @@ void ModelHandler::processor(modelTypeInfo_ &info)
         qDebug() << "onnxruntime";
         if( info.modelType == "resnet18")
         {
-            ort_tutorial test("D:/project/ort-deploy/resnet18.onnx", "D:/project/OpenCV/opencv_tutorial_data/images/space_shuttle.jpg", "D:/project/ort-deploy/imagenet_classes.txt","resnet18");
-            test.set_Show_image(display);
+//            ort_test = new ort_tutorial("D:/project/ort-deploy/resnet18.onnx", "D:/project/OpenCV/opencv_tutorial_data/images/space_shuttle.jpg", "D:/project/ort-deploy/imagenet_classes.txt","resnet18");
+            ort_test = std::make_shared<ort_tutorial>("D:/project/ort-deploy/resnet18.onnx", "D:/project/OpenCV/opencv_tutorial_data/images/space_shuttle.jpg", "D:/project/ort-deploy/imagenet_classes.txt","resnet18");
+            ort_test->set_Show_image(display);
 //            modelInference = test;
-            test.process();
+            ort_test->process();
         }
     }else if (info.deploymode == Openvino)
     {
