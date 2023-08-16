@@ -7,6 +7,7 @@
 #include <memory>
 #include "common_api.h"
 #include "ort_tutorial.h"
+#include "Yolov5_Onnx_Deploy.h"
 
 
 class ModelHandler : public QThread,  public ImageProcessor
@@ -18,6 +19,7 @@ public:
 
 //    ort_tutorial *ort_test;
     std::shared_ptr<ort_tutorial> ort_test;
+    std::shared_ptr<Yolov5_Onnx_Deploy> yolov5_onnx_deploy;
     std::shared_ptr<ModelProcessor> modelInference;
 
 protected:
