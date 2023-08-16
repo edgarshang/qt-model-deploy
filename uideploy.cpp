@@ -104,7 +104,7 @@ void Deploy::onPushButtonClick()
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                                   "/home",
                                                                   tr("Images (*.png *.jpg *.png *.mp4)"));
-        qDebug() << fileName;
+//        qDebug() << fileName;
         pathLineEdit->setText(fileName);
         QSettings initSetting("config.ini", QSettings::IniFormat);
         initSetting.setValue("/init/path", fileName);

@@ -61,11 +61,8 @@ void ort_tutorial::post_image_process(std::vector<Ort::Value> &outputs, cv::Mat 
     int max_index = maxL.x;
     std::cout << "label id: " << max_index << std::endl;
     cv::putText(inputimage, labels[max_index], cv::Point(50, 50), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 0, 255), 2, 8);
-//    cv::imshow("input image", inputimage);
-    image_show->imageshow(inputimage);
-//    cv::waitKey(0);
 
-    // relase resource
+    image_show->imageshow(inputimage);
 
 }
 
@@ -78,11 +75,36 @@ void ort_tutorial::modelRunner()
 void ort_tutorial::process()
 {
     labels = Common_API::readClassNames(label_path);
-    cv::Mat image = cv::imread(image_path);
     this->get_model_info();
-    cv::Mat model_input = this->pre_image_process(image);
-    this->run_model(model_input);
-    this->post_image_process(ort_outputs, image);
+
+    QString path = QString::fromStdString(image_path);
+
+    if(path.endsWith(".mp4") || path.endsWith(".avi"))
+    {
+        cv::VideoCapture capture(path.toStdString());
+        if(capture.isOpened())
+        {
+            cv::Mat frame;
+            while(true)
+            {
+                bool ret = capture.read(frame);
+                if(!ret)
+                {
+                    break;
+                }
+
+                cv::Mat model_input = this->pre_image_process(frame);
+                this->run_model(model_input);
+                this->post_image_process(ort_outputs, frame);
+            }
+        }
+    }else
+    {
+        cv::Mat image = cv::imread(path.toStdString());
+        cv::Mat model_input = this->pre_image_process(image);
+        this->run_model(model_input);
+        this->post_image_process(ort_outputs, image);
+    }
 }
 
 ort_tutorial::~ort_tutorial()
