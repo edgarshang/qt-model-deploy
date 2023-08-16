@@ -1,5 +1,11 @@
 #include "uideploy.h"
 #include <QImage>
+#include <QDebug>
+#include <QString>
+#include <QFileDialog>
+#include <QMessageBox>
+
+const char *modetye[] = {"YOLOv5", "YOLOv8", "FasterRcnn", "MaskRcnn", "Unet", "resnet18"};
 
 Deploy::Deploy(QWidget *parent)
     : QWidget(parent)
@@ -24,12 +30,11 @@ void Deploy::imageshow(cv::Mat &image)
 
 QWidget& Deploy::uileftModelInit()
 {
-    leftModeListWidget.insertItem(0, "YOLOv5");
-    leftModeListWidget.insertItem(1, "YOLOv8");
-    leftModeListWidget.insertItem(2, "FasterRcnn");
-    leftModeListWidget.insertItem(3, "MaskRcnn");
-    leftModeListWidget.insertItem(4, "Unet");
-    leftModeListWidget.insertItem(5, "resnet18");
+
+    for(int i = 0; i < sizeof(modetye)/sizeof(modetye[0]); i++)
+    {
+        leftModeListWidget.insertItem(i, modetye[i]);
+    }
 
     return leftModeListWidget;
 }
@@ -39,17 +44,30 @@ QWidget& Deploy::uiStackWidgetInit()
     stackWidgetGroup.setTitle("Type");
 
     QLabel *pathLabel = new QLabel(tr("path:"));
-    QLineEdit *pathLineEdit = new QLineEdit();
+    pathLineEdit = new QLineEdit();
 
     QHBoxLayout *pathLayout = new QHBoxLayout;
     pathLayout->addWidget(pathLabel);
     pathLayout->addWidget(pathLineEdit);
 
+    QGroupBox *DeployModelTypeGroupBox = new QGroupBox(tr("Deploy ModeType"));
+    onnxruntimeRadioBtn = new QRadioButton(tr("&onnxruntime"));
+    opvinoRadioBtn      = new QRadioButton(tr("&openvino"));
+
+    QVBoxLayout *vbox = new QVBoxLayout;
+    vbox->addWidget(onnxruntimeRadioBtn);
+    vbox->addWidget(opvinoRadioBtn);
+    vbox->addStretch(1);
+    DeployModelTypeGroupBox->setLayout(vbox);
+
     QVBoxLayout *configLayout = new QVBoxLayout;
     configLayout->addLayout(pathLayout);
+    configLayout->addWidget(DeployModelTypeGroupBox);
     configLayout->addStretch(1);
     stackWidgetGroup.setLayout(configLayout);
 
+
+    onnxruntimeRadioBtn->setChecked(true);
 
     return stackWidgetGroup;
 
@@ -60,20 +78,57 @@ QLayout& Deploy::uiButtonInit()
 {
     openfileButton = new QPushButton("Openfile");
     RunButton = new QPushButton("Run");
-    ImageFolderButton = new QPushButton("Folder");
 
     buttonLayout.addWidget(openfileButton);
     buttonLayout.addWidget(RunButton);
-    buttonLayout.addWidget(ImageFolderButton);
     buttonLayout.addStretch(1);
 
+    connect(openfileButton, SIGNAL(clicked(bool)), this, SLOT(onPushButtonClick()));
+    connect(RunButton, SIGNAL(clicked(bool)), this, SLOT(onPushButtonClick()));
+
     return buttonLayout;
+}
+
+void Deploy::onPushButtonClick()
+{
+    QPushButton* btn =  (QPushButton*)sender();
+    QString text = btn->text();
+//    qDebug() << text;
+    if( text == "Openfile")
+    {
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+                                                                  "/home",
+                                                                  tr("Images (*.png *.jpg *.png *.mp4)"));
+        qDebug() << fileName;
+        pathLineEdit->setText(fileName);
+    }else if( text == "Run" )
+    {
+        modelTypeInfo.filePath = pathLineEdit->text();
+        modelTypeInfo.modelType = modetye[leftModeListWidget.currentRow()];
+        modelTypeInfo.deploymode = onnxruntimeRadioBtn->isChecked() ? OnnxRunTime : Openvino;
+
+//        qDebug() << modelTypeInfo.modelType;
+//        qDebug() << modelTypeInfo.deploymode;
+//        qDebug() << modelTypeInfo.filePath;
+
+        if( modelTypeInfo.filePath != NULL)
+        {
+            imageProcess->processor(modelTypeInfo);
+        }else
+        {
+            QMessageBox::warning(this, "No ImagePath","Please input the imagePath", QMessageBox::Ok);
+        }
+
+
+    }
+
+
 }
 
 QLayout& Deploy::uiShowInit()
 {
     QHBoxLayout *showLayout = new QHBoxLayout;
-    QshowLabel.setMinimumSize(200,200);
+    QshowLabel.setMinimumSize(480,400);
     showLayout->addWidget(&QshowLabel);
 
     return *showLayout;

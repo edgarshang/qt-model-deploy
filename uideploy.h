@@ -11,6 +11,7 @@
 #include <QFormLayout>
 #include <QLabel>
 #include <QLineEdit>
+#include <QRadioButton>
 
 #include <QWidget>
 
@@ -38,7 +39,15 @@ public:
 public: // button
     QPushButton* openfileButton;
     QPushButton* RunButton;
-    QPushButton* ImageFolderButton;
+
+    QLineEdit *pathLineEdit;
+    QRadioButton *onnxruntimeRadioBtn;
+    QRadioButton *opvinoRadioBtn;
+
+    modelTypeInfo_ modelTypeInfo;
+
+public slots:
+    void onPushButtonClick();
 public:
     QListWidget leftModeListWidget;
 
@@ -59,6 +68,10 @@ public:
 
 public:
     QHBoxLayout uilayout;
+
+public:
+    ImageProcessor *imageProcess;
+    void setImageProcesser(ImageProcessor *process){imageProcess = process;}
 
 };
 

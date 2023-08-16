@@ -22,6 +22,8 @@ public:
     // show
     void set_Show_image(Show *imageShower);
 
+//    virtual void modelRunner();
+
 private:
     std::string model_path;
     std::string image_path;

@@ -72,6 +72,11 @@ void ort_tutorial::post_image_process(std::vector<Ort::Value> &outputs, cv::Mat 
 
 }
 
+
+//void ort_tutorial::modelRunner()
+//{
+//    this->process();
+//}
 void ort_tutorial::process()
 {
     labels = Common_API::readClassNames(label_path);

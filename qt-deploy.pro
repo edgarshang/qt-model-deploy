@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
     uideploy.cpp \
     ort_tutorial.cpp \
-    common_api.cpp
+    common_api.cpp \
+    ModelHandler.cpp
 
 HEADERS += \
     uideploy.h \
     ort_tutorial.h \
-    common_api.h
+    common_api.h \
+    ModelHandler.h
 
 INCLUDEPATH += $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include\opencv2) \
