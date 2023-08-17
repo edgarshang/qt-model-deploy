@@ -13,7 +13,7 @@
 class Yolov5_Onnx_Deploy : public ModelProcessor
 {
 public:
-    Yolov5_Onnx_Deploy(std::string modelPath, std::string imagePath, std::string label_text);
+    Yolov5_Onnx_Deploy(std::string modelPath, std::string imagePath, std::string label_text, std::string modelType);
     ~Yolov5_Onnx_Deploy();
     void get_model_info();
     cv::Mat pre_image_process(cv::Mat &image);
@@ -29,6 +29,7 @@ private:
     std::string model_path;
     std::string image_path;
     std::string label_path;
+    std::string model;
     std::vector<std::string> labels;
     Ort::SessionOptions session_options;
     Ort::Env env;

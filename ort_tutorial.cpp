@@ -100,6 +100,8 @@ void ort_tutorial::process()
                 this->run_model(model_input);
                 this->post_image_process(ort_outputs, frame);
             }
+
+             capture.release();
         }
     }else
     {
@@ -108,12 +110,13 @@ void ort_tutorial::process()
         this->run_model(model_input);
         this->post_image_process(ort_outputs, image);
     }
+
+    session_options.release();
+    session_->release();
 }
 
 ort_tutorial::~ort_tutorial()
 {
-    session_options.release();
-    session_->release();
     std::cout << "disconstruct" << std::endl;
 }
 

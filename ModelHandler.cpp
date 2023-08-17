@@ -24,15 +24,13 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             ort_test->set_Show_image(display);
             modelInference = ort_test;
             this->start();
-        }else if( info.modelType == "YOLOv5" )
+        }else if( info.modelType == "YOLOv5" || info.modelType == "YOLOv8")
         {
-            yolov5_onnx_deploy = std::make_shared<Yolov5_Onnx_Deploy>("D:/project/ort-deploy/yolov5s.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt");
+            yolov5_onnx_deploy = std::make_shared<Yolov5_Onnx_Deploy>((info.modelType == "YOLOv5" ? "D:/project/ort-deploy/yolov5s.onnx":"D:/project/ort-deploy/yolov8n.onnx"),
+                                                                      info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
             yolov5_onnx_deploy->set_Show_image(display);
             modelInference = yolov5_onnx_deploy;
             this->start();
-        }else if( info.modelType == "YOLOv8" )
-        {
-
         }else if( info.modelType == "FasterRcnn" )
         {
 

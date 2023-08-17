@@ -3,23 +3,22 @@
 
 
 
-Yolov5_Onnx_Deploy::Yolov5_Onnx_Deploy(std::string modelPath, std::string imagePath, std::string label_text)
+Yolov5_Onnx_Deploy::Yolov5_Onnx_Deploy(std::string modelPath, std::string imagePath, std::string label_text, std::string modelType)
 {
     model_path = modelPath;
     image_path = imagePath;
     label_path = label_text;
+    model = modelType;
 }
 
 Yolov5_Onnx_Deploy::~Yolov5_Onnx_Deploy()
 {
-    session_options.release();
-    session_->release();
     std::cout << "disconstruct" << std::endl;
 }
 
 void Yolov5_Onnx_Deploy::get_model_info()
 {
-    env = Ort::Env(ORT_LOGGING_LEVEL_ERROR, "yolov5");
+    env = Ort::Env(ORT_LOGGING_LEVEL_ERROR, (model == "YOLOv5" ? "yolov5" : "yolov8"));
     session_options.SetGraphOptimizationLevel(ORT_ENABLE_BASIC);
     w_model_path = std::wstring(model_path.begin(), model_path.end());
 
@@ -69,7 +68,6 @@ cv::Mat Yolov5_Onnx_Deploy::pre_image_process(cv::Mat &image)
 
     cv::Mat blob = cv::dnn::blobFromImage(image_m, 1.0/255.0, cv::Size(input_w, input_h),
                                           cv::Scalar(0,0,0), true, true);
-//    size_t tpixels = input_h * input_w *3;
 
     return blob;
 }
@@ -101,15 +99,21 @@ void Yolov5_Onnx_Deploy::post_image_process(std::vector<Ort::Value> &outputs, cv
     std::vector<float> confidences;
     cv::Mat det_output(out_num, out_ch, CV_32F, (float*)pdata);
 
+    det_output = (model == "YOLOv5" ? det_output : det_output.t());
 
     for(int i = 0; i < det_output.rows; i++)
     {
-        float conf = det_output.at<float>(i,4);
-        if(conf < 0.45)
+        if (model == "YOLOv5")
         {
-            continue;
+            float conf = det_output.at<float>(i,4);
+            if(conf < 0.45)
+            {
+                continue;
+            }
         }
-        cv::Mat classes_scores = det_output.row(i).colRange(5, out_ch);
+
+
+        cv::Mat classes_scores = det_output.row(i).colRange((model == "YOLOv5" ? 5 : 4), (model == "YOLOv5" ? out_ch : out_num));
         cv::Point classIdPoint;
         double score;
         cv::minMaxLoc(classes_scores, 0, &score, 0, &classIdPoint);
@@ -184,12 +188,18 @@ void Yolov5_Onnx_Deploy::process()
                 this->post_image_process(ort_outputs, frame);
             }
         }
+
+        capture.release();
+        session_options.release();
+        session_->release();
     }
     else{
         cv::Mat image = cv::imread(path.toStdString());
         cv::Mat model_input = this->pre_image_process(image);
         this->run_model(model_input);
         this->post_image_process(ort_outputs, image);
+        session_options.release();
+        session_->release();
     }
 }
 // show
