@@ -99,6 +99,7 @@ void ort_tutorial::process()
                 cv::Mat model_input = this->pre_image_process(frame);
                 this->run_model(model_input);
                 this->post_image_process(ort_outputs, frame);
+                image_show->imageshow(frame);
             }
 
              capture.release();
@@ -109,6 +110,7 @@ void ort_tutorial::process()
         cv::Mat model_input = this->pre_image_process(image);
         this->run_model(model_input);
         this->post_image_process(ort_outputs, image);
+        image_show->imageshow(image);
     }
 
     session_options.release();

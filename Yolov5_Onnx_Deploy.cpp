@@ -158,10 +158,8 @@ void Yolov5_Onnx_Deploy::post_image_process(std::vector<Ort::Value> &outputs, cv
     // compute the fps
     float t = (cv::getTickCount() - start_time) / static_cast<float>(cv::getTickFrequency());
     cv::putText(inputimage, cv::format("FPS: %.2f", 1.0/t), cv::Point(20,40), cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(255, 0, 0), 2, 8);
-    image_show->imageshow(inputimage);
-
-
 }
+
 void Yolov5_Onnx_Deploy::process()
 {
     labels = Common_API::readClassNames(label_path);
@@ -186,21 +184,22 @@ void Yolov5_Onnx_Deploy::process()
                 cv::Mat model_input = this->pre_image_process(frame);
                 this->run_model(model_input);
                 this->post_image_process(ort_outputs, frame);
+                image_show->imageshow(frame);
             }
-        }
 
-        capture.release();
-        session_options.release();
-        session_->release();
+            capture.release();
+        }
     }
     else{
         cv::Mat image = cv::imread(path.toStdString());
         cv::Mat model_input = this->pre_image_process(image);
         this->run_model(model_input);
         this->post_image_process(ort_outputs, image);
-        session_options.release();
-        session_->release();
+        image_show->imageshow(image);
     }
+
+    session_options.release();
+    session_->release();
 }
 // show
 void Yolov5_Onnx_Deploy::set_Show_image(Show *imageShower)
