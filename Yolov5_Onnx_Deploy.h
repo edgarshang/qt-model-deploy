@@ -50,6 +50,9 @@ private:
     std::vector<Ort::Value> ort_outputs;
 
     Show *image_show;
+
+    float x_factor;
+    float y_factor;
 };
 
 #endif // YOLOV5_ONNX_DEPLOY_H
