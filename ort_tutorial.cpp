@@ -11,7 +11,7 @@ ort_tutorial::ort_tutorial(std::string modelPath, std::string imagePath, std::st
 cv::Mat ort_tutorial::pre_image_process(cv::Mat &image)
 {
     //cv::Mat image = cv::imread(image_path);
-
+    start_time = cv::getTickCount();
     // set input image
     cv::Mat rgb, blob;
     // RGB order
@@ -59,8 +59,11 @@ void ort_tutorial::post_image_process(std::vector<Ort::Value> &outputs, cv::Mat 
     double maxv, minv;
     cv::minMaxLoc(prob, &minv, &maxv, &minL, &maxL);
     int max_index = maxL.x;
-    std::cout << "label id: " << max_index << std::endl;
-    cv::putText(inputimage, labels[max_index], cv::Point(50, 50), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 0, 255), 2, 8);
+//    std::cout << "label id: " << max_index << std::endl;
+    cv::putText(inputimage, labels[max_index], cv::Point(50, 80), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 0, 255), 2, 8);
+
+    float t = (cv::getTickCount() - start_time) / static_cast<float>(cv::getTickFrequency());
+    cv::putText(inputimage, cv::format("FPS: %.2f", 1.0/t), cv::Point(20,30), cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(255, 0, 0), 2, 8);
 
     image_show->imageshow(inputimage);
 

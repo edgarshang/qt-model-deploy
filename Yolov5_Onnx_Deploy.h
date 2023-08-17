@@ -53,6 +53,8 @@ private:
 
     float x_factor;
     float y_factor;
+
+    int64 start_time;
 };
 
 #endif // YOLOV5_ONNX_DEPLOY_H

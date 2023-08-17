@@ -49,6 +49,8 @@ private:
     std::vector<Ort::Value> ort_outputs;
 
     Show *image_show;
+
+     int64 start_time;
 };
 
 #endif // ORT_TUTORIAL_H

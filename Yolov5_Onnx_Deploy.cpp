@@ -55,6 +55,7 @@ void Yolov5_Onnx_Deploy::get_model_info()
 }
 cv::Mat Yolov5_Onnx_Deploy::pre_image_process(cv::Mat &image)
 {
+    start_time = cv::getTickCount();
     int w = image.cols;
     int h = image.rows;
 
@@ -146,15 +147,16 @@ void Yolov5_Onnx_Deploy::post_image_process(std::vector<Ort::Value> &outputs, cv
         int idx = indexes[i];
         int cid = classIds[idx];
         cv::rectangle(inputimage, boxes[idx], cv::Scalar(0,0,255), 2, 8,0);
-        cv::putText(inputimage, labels[cid].c_str(), boxes[idx].tl(),
-                    cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(0,255,0), 1, 8);
-
+        cv::putText(inputimage, cv::format("%s_%.2f", labels[cid].c_str(), confidences[idx]) , boxes[idx].tl(),
+                    cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(0,255,0), 2, 8);
     }
 
+    // compute the fps
+    float t = (cv::getTickCount() - start_time) / static_cast<float>(cv::getTickFrequency());
+    cv::putText(inputimage, cv::format("FPS: %.2f", 1.0/t), cv::Point(20,40), cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(255, 0, 0), 2, 8);
     image_show->imageshow(inputimage);
 
-    // compute the fps
-    // TODO-A
+
 }
 void Yolov5_Onnx_Deploy::process()
 {
@@ -198,6 +200,5 @@ void Yolov5_Onnx_Deploy::set_Show_image(Show *imageShower)
 
 void Yolov5_Onnx_Deploy::modelRunner()
 {
-    qDebug() << "modelRunner()";
     this->process();
 }
