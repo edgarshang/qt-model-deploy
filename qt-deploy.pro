@@ -29,14 +29,16 @@ SOURCES += \
     ort_tutorial.cpp \
     common_api.cpp \
     ModelHandler.cpp \
-    Yolov5_Onnx_Deploy.cpp
+    Yolov5_Onnx_Deploy.cpp \
+    FasterRcnn.cpp
 
 HEADERS += \
     uideploy.h \
     ort_tutorial.h \
     common_api.h \
     ModelHandler.h \
-    Yolov5_Onnx_Deploy.h
+    Yolov5_Onnx_Deploy.h \
+    FasterRcnn.h
 
 INCLUDEPATH += $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include\opencv2) \

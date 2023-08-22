@@ -33,7 +33,10 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if( info.modelType == "FasterRcnn" )
         {
-
+            faster_rcnn_deploy = std::make_shared<FasterRcnn>("D:/project/ort-deploy/faster_rcnn.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt");
+            faster_rcnn_deploy->set_Show_image(display);
+            modelInference = faster_rcnn_deploy;
+            this->start();
         }else if( info.modelType == "MaskRcnn" )
         {
 
