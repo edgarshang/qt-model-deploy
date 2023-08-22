@@ -6,7 +6,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
-const char *modetye[] = {"YOLOv5", "YOLOv8", "FasterRcnn", "MaskRcnn", "Unet", "resnet18"};
+const char *modetye[] = {"resnet18", "YOLOv5", "YOLOv8", "RetinaNet", "FasterRcnn", "MaskRcnn", "Unet"};
 
 Deploy::Deploy(QWidget *parent)
     : QWidget(parent)

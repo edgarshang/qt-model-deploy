@@ -18,6 +18,7 @@ void ModelHandler::processor(modelTypeInfo_ &info)
     if( info.deploymode == OnnxRunTime)
     {
         qDebug() << "onnxruntime";
+
         if( info.modelType == "resnet18")
         {
             ort_test = std::make_shared<ort_tutorial>("D:/project/ort-deploy/resnet18.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/imagenet_classes.txt");
@@ -31,21 +32,17 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             yolov5_onnx_deploy->set_Show_image(display);
             modelInference = yolov5_onnx_deploy;
             this->start();
-        }else if( info.modelType == "FasterRcnn" )
+        }else if( info.modelType == "FasterRcnn" || info.modelType == "RetinaNet")
         {
-            faster_rcnn_deploy = std::make_shared<FasterRcnn>("D:/project/ort-deploy/faster_rcnn.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt");
+            qDebug() << "info.modelType = " << info.modelType;
+            faster_rcnn_deploy = std::make_shared<FasterRcnn>((info.modelType == "FasterRcnn" ? "D:/project/ort-deploy/faster_rcnn.onnx" : "D:/project/ort-deploy/retinanet_resnet50_fpn.onnx"),
+                                                              info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
             faster_rcnn_deploy->set_Show_image(display);
             modelInference = faster_rcnn_deploy;
+
             this->start();
-        }else if( info.modelType == "MaskRcnn" )
-        {
-
-        }else if( info.modelType == "Unet" )
-        {
-
-        }else if( info.modelType == "resnet18" )
-        {
-
+        }else {
+            qDebug() << "models deploys not supported!!!";
         }
     }else if (info.deploymode == Openvino)
     {
@@ -55,6 +52,8 @@ void ModelHandler::processor(modelTypeInfo_ &info)
 
 void ModelHandler::run()
 {
-     modelInference->modelRunner();
-     qDebug() << "run()...";
+    if(modelInference != nullptr)
+    {
+        modelInference->modelRunner();
+    }
 }

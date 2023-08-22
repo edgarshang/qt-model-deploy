@@ -13,7 +13,7 @@
 class FasterRcnn : public ModelProcessor
 {
 public:
-    FasterRcnn(std::string modelPath, std::string imagePath, std::string label_text);
+    FasterRcnn(std::string modelPath, std::string imagePath, std::string label_text, std::string modelType);
     ~FasterRcnn();
     void get_model_info();
     cv::Mat pre_image_process(cv::Mat &image);

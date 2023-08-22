@@ -1,10 +1,13 @@
 #include "FasterRcnn.h"
 
-FasterRcnn::FasterRcnn(std::string modelPath, std::string imagePath, std::string label_text)
+FasterRcnn::FasterRcnn(std::string modelPath, std::string imagePath, std::string label_text, std::string modelType)
 {
     model_path = modelPath;
     image_path = imagePath;
     label_path = label_text;
+    model = modelType;
+
+    std::cout << "hello, world";
 }
 
 FasterRcnn::~FasterRcnn()
@@ -75,8 +78,19 @@ void FasterRcnn::run_model(cv::Mat &input_image)
 void FasterRcnn::post_image_process(std::vector<Ort::Value> &outputs, cv::Mat &inputimage)
 {
     const float* boxes = outputs[0].GetTensorMutableData<float>();
-    const int64* labels = outputs[1].GetTensorMutableData<int64>();
-    const float* scores = outputs[2].GetTensorMutableData<float>();
+    const int64* labels = nullptr;
+    const float* scores = nullptr;
+    if(model == "FasterRcnn")
+    {
+        labels = outputs[1].GetTensorMutableData<int64>();
+        scores = outputs[2].GetTensorMutableData<float>();
+    }else if(model == "RetinaNet")
+    {
+        labels = outputs[2].GetTensorMutableData<int64>();
+        scores = outputs[1].GetTensorMutableData<float>();
+    }
+
+
 
     auto outShape = outputs[0].GetTensorTypeAndShapeInfo().GetShape();
     size_t rows = outShape[0];
@@ -89,7 +103,7 @@ void FasterRcnn::post_image_process(std::vector<Ort::Value> &outputs, cv::Mat &i
         double conf = scores[i];
         int cid = labels[i] - 1;
         // 置信度在0-1之间
-        if(conf > 0.25)
+        if(conf > 0.85)
         {
             float x1 = det_output.at<float>(i,0);
             float y1 = det_output.at<float>(i,1);
