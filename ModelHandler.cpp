@@ -25,9 +25,9 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             ort_test->set_Show_image(display);
             modelInference = ort_test;
             this->start();
-        }else if( info.modelType == "YOLOv5" || info.modelType == "YOLOv8")
+        }else if( info.modelType == YOLOV5 || info.modelType == YOLOV8)
         {
-            yolov5_onnx_deploy = std::make_shared<Yolov5_Onnx_Deploy>((info.modelType == "YOLOv5" ? "D:/project/ort-deploy/yolov5s.onnx":"D:/project/ort-deploy/yolov8n.onnx"),
+            yolov5_onnx_deploy = std::make_shared<Yolov5_Onnx_Deploy>((info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.onnx":"D:/project/ort-deploy/yolov8n.onnx"),
                                                                       info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
             yolov5_onnx_deploy->set_Show_image(display);
             modelInference = yolov5_onnx_deploy;
@@ -40,6 +40,13 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             faster_rcnn_deploy->set_Show_image(display);
             modelInference = faster_rcnn_deploy;
 
+            this->start();
+        }else if(info.modelType == YOLOV5_SEG || info.modelType == YOLOV8_SEG){
+            qDebug() << "info.modelType : " << info.modelType;
+            yolov5_seg_onnx_deploy = std::make_shared<Yolov5_Seg_Onnx>((info.modelType == YOLOV5_SEG ? "D:/project/ort-deploy/yolov5s-seg.onnx":"D:/project/ort-deploy/yolov8n.onnx"),
+                                                                      info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
+            yolov5_seg_onnx_deploy->set_Show_image(display);
+            modelInference = yolov5_seg_onnx_deploy;
             this->start();
         }else {
             qDebug() << "models deploys not supported!!!";

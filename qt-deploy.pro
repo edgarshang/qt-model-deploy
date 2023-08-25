@@ -30,7 +30,8 @@ SOURCES += \
     common_api.cpp \
     ModelHandler.cpp \
     Yolov5_Onnx_Deploy.cpp \
-    FasterRcnn.cpp
+    FasterRcnn.cpp \
+    Yolov5_Seg_Onnx.cpp
 
 HEADERS += \
     uideploy.h \
@@ -38,7 +39,8 @@ HEADERS += \
     common_api.h \
     ModelHandler.h \
     Yolov5_Onnx_Deploy.h \
-    FasterRcnn.h
+    FasterRcnn.h \
+    Yolov5_Seg_Onnx.h
 
 INCLUDEPATH += $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include\opencv2) \

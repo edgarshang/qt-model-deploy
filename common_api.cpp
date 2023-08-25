@@ -25,3 +25,9 @@ std::vector<std::string> Common_API::readClassNames(std::string classNamePath)
 
     return classNames;
 }
+
+float Common_API::sigmoid_function(float a)
+{
+    float b = 1. / (1. + exp(-a));
+    return b;
+}

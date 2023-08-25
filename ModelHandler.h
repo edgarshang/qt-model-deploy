@@ -8,6 +8,7 @@
 #include "common_api.h"
 #include "ort_tutorial.h"
 #include "Yolov5_Onnx_Deploy.h"
+#include "Yolov5_Seg_Onnx.h"
 #include "FasterRcnn.h"
 
 
@@ -21,6 +22,7 @@ public:
 //    ort_tutorial *ort_test;
     std::shared_ptr<ort_tutorial> ort_test;
     std::shared_ptr<Yolov5_Onnx_Deploy> yolov5_onnx_deploy;
+    std::shared_ptr<Yolov5_Seg_Onnx> yolov5_seg_onnx_deploy;
     std::shared_ptr<FasterRcnn> faster_rcnn_deploy;
     std::shared_ptr<ModelProcessor> modelInference;
 

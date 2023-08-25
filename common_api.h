@@ -6,6 +6,10 @@
 #include <opencv2/opencv.hpp>
 #include <QString>
 
+#define YOLOV5  "YOLOv5"
+#define YOLOV8  "YOLOv8"
+#define YOLOV5_SEG "YOLOv5_Seg"
+#define YOLOV8_SEG "YOLOv8_Seg"
 
 enum DeployMode { OnnxRunTime, Openvino };
 typedef struct
@@ -21,7 +25,9 @@ class Common_API
 {
 public:
     static std::vector<std::string> readClassNames(std::string classNamePath);
+    static float sigmoid_function(float a);
 };
+
 
 class Show
 {
