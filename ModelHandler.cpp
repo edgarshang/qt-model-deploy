@@ -43,7 +43,7 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if(info.modelType == YOLOV5_SEG || info.modelType == YOLOV8_SEG){
             qDebug() << "info.modelType : " << info.modelType;
-            yolov5_seg_onnx_deploy = std::make_shared<Yolov5_Seg_Onnx>((info.modelType == YOLOV5_SEG ? "D:/project/ort-deploy/yolov5s-seg.onnx":"D:/project/ort-deploy/yolov8n.onnx"),
+            yolov5_seg_onnx_deploy = std::make_shared<Yolov5_Seg_Onnx>((info.modelType == YOLOV5_SEG ? "D:/project/ort-deploy/yolov5s-seg.onnx":"D:/project/ort-deploy/yolov8n-seg.onnx"),
                                                                       info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
             yolov5_seg_onnx_deploy->set_Show_image(display);
             modelInference = yolov5_seg_onnx_deploy;

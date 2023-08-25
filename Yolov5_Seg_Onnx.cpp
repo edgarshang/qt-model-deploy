@@ -133,7 +133,7 @@ void Yolov5_Seg_Onnx::post_image_process(std::vector<Ort::Value> &outputs, cv::M
         }
 
 
-        cv::Mat classes_scores = det_output.row(i).colRange((model == YOLOV5_SEG ? 5 : 4), (model == YOLOV5_SEG ? (out_ch - 32) : out_num));
+        cv::Mat classes_scores = det_output.row(i).colRange((model == YOLOV5_SEG ? 5 : 4), (model == YOLOV5_SEG ? (out_ch - 32) : (out_num - 32)));
         cv::Point classIdPoint;
         double score;
         cv::minMaxLoc(classes_scores, 0, &score, 0, &classIdPoint);
@@ -142,7 +142,7 @@ void Yolov5_Seg_Onnx::post_image_process(std::vector<Ort::Value> &outputs, cv::M
         if( score > 0.25)
         {
 
-            cv::Mat mask2 = det_output.row(i).colRange(out_ch - 32, out_ch);
+            cv::Mat mask2 = det_output.row(i).colRange(model == YOLOV5_SEG ? (out_ch - 32): (out_num - 32), model == YOLOV5_SEG ? (out_ch) : (out_num));
 
             float cx = det_output.at<float>(i,0);
             float cy = det_output.at<float>(i,1);
