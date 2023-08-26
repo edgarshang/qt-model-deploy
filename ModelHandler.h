@@ -10,6 +10,7 @@
 #include "Yolov5_Onnx_Deploy.h"
 #include "Yolov5_Seg_Onnx.h"
 #include "FasterRcnn.h"
+#include "MaskRcnn_Seg_Onnx.h"
 
 
 class ModelHandler : public QThread,  public ImageProcessor
@@ -25,6 +26,7 @@ public:
     std::shared_ptr<Yolov5_Seg_Onnx> yolov5_seg_onnx_deploy;
     std::shared_ptr<FasterRcnn> faster_rcnn_deploy;
     std::shared_ptr<ModelProcessor> modelInference;
+    std::shared_ptr<MaskRcnn_Seg_Onnx> maskRcnn_Seg_onnx_deploy;
 
 protected:
     void run();

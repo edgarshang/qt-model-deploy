@@ -24,14 +24,5 @@ int main(int argc, char *argv[])
 
     w.show();
 
-
     return a.exec();
-
-
-//    std::cout << "hello, world" << std::endl;
-//    ort_tutorial test("D:/project/ort-deploy/resnet18.onnx", "D:/project/OpenCV/opencv_tutorial_data/images/space_shuttle.jpg", "D:/project/ort-deploy/imagenet_classes.txt","resnet18");
-//    test.process();
-//    return 0;
-
-
 }

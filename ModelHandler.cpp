@@ -48,7 +48,15 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             yolov5_seg_onnx_deploy->set_Show_image(display);
             modelInference = yolov5_seg_onnx_deploy;
             this->start();
-        }else {
+        }else if(info.modelType == "MaskRcnn")
+        {
+            qDebug() << "info.modelType : " << info.modelType;
+            maskRcnn_Seg_onnx_deploy = std::make_shared<MaskRcnn_Seg_Onnx>("D:/project/ort-deploy/mask_rcnn.onnx", info.filePath.toStdString(),"D:/project/ort-deploy/classes.txt");
+            maskRcnn_Seg_onnx_deploy->set_Show_image(display);
+            modelInference = maskRcnn_Seg_onnx_deploy;
+            this->start();
+        }
+        else {
             qDebug() << "models deploys not supported!!!";
         }
     }else if (info.deploymode == Openvino)
