@@ -62,6 +62,13 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             deepLabV3_onnx_deploy->set_Show_image(display);
             modelInference = deepLabV3_onnx_deploy;
             this->start();
+        }else if("Unet" == info.modelType)
+        {
+            qDebug() << "info.modelType: " << info.modelType;
+            unet_onnx_deploy = std::make_shared<Unet>("D:/project/ort-deploy/unet_road.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
+            unet_onnx_deploy->set_Show_image(display);
+            modelInference = unet_onnx_deploy;
+            this->start();
         }
         else {
             qDebug() << "models deploys not supported!!!";

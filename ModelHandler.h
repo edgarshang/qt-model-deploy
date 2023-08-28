@@ -12,6 +12,7 @@
 #include "FasterRcnn.h"
 #include "MaskRcnn_Seg_Onnx.h"
 #include "DeepLabV3.h"
+#include "Unet.h"
 
 
 class ModelHandler : public QThread,  public ImageProcessor
@@ -29,6 +30,7 @@ public:
     std::shared_ptr<ModelProcessor> modelInference;
     std::shared_ptr<MaskRcnn_Seg_Onnx> maskRcnn_Seg_onnx_deploy;
     std::shared_ptr<DeepLabV3> deepLabV3_onnx_deploy;
+    std::shared_ptr<Unet> unet_onnx_deploy;
 
 protected:
     void run();
