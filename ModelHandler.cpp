@@ -55,6 +55,13 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             maskRcnn_Seg_onnx_deploy->set_Show_image(display);
             modelInference = maskRcnn_Seg_onnx_deploy;
             this->start();
+        }else if("DeepLabV3" == info.modelType)
+        {
+            qDebug() << "info.modelType: " << info.modelType;
+            deepLabV3_onnx_deploy = std::make_shared<DeepLabV3>("D:/project/ort-deploy/deeplabv3_mobilenet.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
+            deepLabV3_onnx_deploy->set_Show_image(display);
+            modelInference = deepLabV3_onnx_deploy;
+            this->start();
         }
         else {
             qDebug() << "models deploys not supported!!!";
