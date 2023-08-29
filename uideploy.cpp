@@ -105,9 +105,13 @@ void Deploy::onPushButtonClick()
                                                                   "/home",
                                                                   tr("Images (*.png *.jpg *.png *.mp4)"));
 //        qDebug() << fileName;
-        pathLineEdit->setText(fileName);
-        QSettings initSetting("config.ini", QSettings::IniFormat);
-        initSetting.setValue("/init/path", fileName);
+        if(!fileName.isEmpty())
+        {
+            pathLineEdit->setText(fileName);
+            QSettings initSetting("config.ini", QSettings::IniFormat);
+            initSetting.setValue("/init/path", fileName);
+        }
+
     }else if( text == "Run" )
     {
         modelTypeInfo.filePath = pathLineEdit->text();
