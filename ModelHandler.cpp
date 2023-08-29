@@ -85,6 +85,14 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             yolov8_pose_deploy->set_Show_image(display);
             modelInference = yolov8_pose_deploy;
             this->start();
+        }else if("Yolov6_FaceLandMark" == info.modelType)
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            yolov6_face_deploy = std::make_shared<Yolov6_Face>("D:/project/ort-deploy/yolov6n_face.onnx", info.filePath.toStdString(),
+                                                               "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
+            yolov6_face_deploy->set_Show_image(display);
+            modelInference = yolov6_face_deploy;
+            this->start();
         }
         else {
             qDebug() << "models deploys not supported!!!";

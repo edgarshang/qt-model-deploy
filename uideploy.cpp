@@ -7,7 +7,8 @@
 #include <QSettings>
 
 const char *modetye[] = {"resnet18", "YOLOv5", "YOLOv8", "RetinaNet", "FasterRcnn", "YOLOv5_Seg",
-                         "YOLOv8_Seg", "MaskRcnn", "DeepLabV3", "Unet", "keyPointRcnn", "YOLOv8_Pose"};
+                         "YOLOv8_Seg", "MaskRcnn", "DeepLabV3", "Unet", "keyPointRcnn", "YOLOv8_Pose",
+                        "Yolov6_FaceLandMark"};
 
 Deploy::Deploy(QWidget *parent)
     : QWidget(parent)

@@ -36,7 +36,8 @@ SOURCES += \
     DeepLabV3.cpp \
     Unet.cpp \
     keyPointRcnn.cpp \
-    Yolov8_KeyPoint.cpp
+    Yolov8_KeyPoint.cpp \
+    Yolov6_Face.cpp
 
 HEADERS += \
     uideploy.h \
@@ -50,7 +51,8 @@ HEADERS += \
     DeepLabV3.h \
     Unet.h \
     keyPointRcnn.h \
-    Yolov8_KeyPoint.h
+    Yolov8_KeyPoint.h \
+    Yolov6_Face.h
 
 INCLUDEPATH += $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include\opencv2) \

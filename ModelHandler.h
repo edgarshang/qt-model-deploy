@@ -15,6 +15,7 @@
 #include "Unet.h"
 #include "keyPointRcnn.h"
 #include "Yolov8_KeyPoint.h"
+#include "Yolov6_Face.h"
 
 
 class ModelHandler : public QThread,  public ImageProcessor
@@ -35,6 +36,7 @@ public:
     std::shared_ptr<Unet> unet_onnx_deploy;
     std::shared_ptr<keyPointRcnn> keyPointRcnn_onnx_deploy;
     std::shared_ptr<Yolov8_KeyPoint> yolov8_pose_deploy;
+    std::shared_ptr<Yolov6_Face> yolov6_face_deploy;
 
 protected:
     void run();
