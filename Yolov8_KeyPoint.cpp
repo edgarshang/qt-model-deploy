@@ -65,6 +65,14 @@ cv::Mat Yolov8_KeyPoint::pre_image_process(cv::Mat &image)
     x_factor = image_m.cols / static_cast<float>(640);
     y_factor = image_m.rows / static_cast<float>(640);
 
+    m1_factor = cv::Mat::zeros(cv::Size(3, 17), CV_32FC1);
+    for(int i = 0; i< 17; i++)
+    {
+        m1_factor.at<float>(i,0) = x_factor;
+        m1_factor.at<float>(i,1) = y_factor;
+        m1_factor.at<float>(i,2) = 1.0f;
+    }
+
     cv::Mat blob = cv::dnn::blobFromImage(image_m, 1.0/255.0, cv::Size(input_w, input_h),
                                           cv::Scalar(0,0,0), true, true);
 
@@ -143,13 +151,15 @@ void Yolov8_KeyPoint::post_image_process(std::vector<Ort::Value> &outputs, cv::M
         cv::putText(inputimage, cv::format("%.2f", confidences[idx]) , boxes[idx].tl(),
                     cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(0,255,0), 2, 8);
         cv::Mat keyPoint = keypoints[i];
-        keyPoint = keyPoint * x_factor;
-        qDebug() << "keyPoint.cols" << keyPoint.cols << "keyPoint.rows" << keyPoint.rows;
+        keyPoint = keyPoint.reshape(0,17);
+        cv::Mat kp;
 
-        const float* kpts_data = &keyPoint.at<float>(0,0);
+        cv::multiply(keyPoint, m1_factor, kp);
+        kp = kp.reshape(0,51);
+
+        const float* kpts_data = &kp.at<float>(0,0);
 
         // draw key points
-//        const float* kpts_data = &multiple_kypts[i * 51];
         // nose -> left_eye -> left_ear.(0, 1), (1, 3)
         cv::line(inputimage, cv::Point(kpts_data[0], kpts_data[1]), cv::Point(kpts_data[3], kpts_data[4]), cv::Scalar(255, 255, 0), 2, 8, 0);
         cv::line(inputimage, cv::Point(kpts_data[3], kpts_data[4]), cv::Point(kpts_data[9], kpts_data[10]), cv::Scalar(255, 255, 0), 2, 8, 0);

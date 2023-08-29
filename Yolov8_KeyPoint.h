@@ -55,6 +55,7 @@ private:
 
     float x_factor;
     float y_factor;
+    cv::Mat m1_factor;
 
     int64 start_time;
 };
