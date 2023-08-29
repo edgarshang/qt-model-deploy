@@ -34,7 +34,8 @@ SOURCES += \
     Yolov5_Seg_Onnx.cpp \
     MaskRcnn_Seg_Onnx.cpp \
     DeepLabV3.cpp \
-    Unet.cpp
+    Unet.cpp \
+    keyPointRcnn.cpp
 
 HEADERS += \
     uideploy.h \
@@ -46,7 +47,8 @@ HEADERS += \
     Yolov5_Seg_Onnx.h \
     MaskRcnn_Seg_Onnx.h \
     DeepLabV3.h \
-    Unet.h
+    Unet.h \
+    keyPointRcnn.h
 
 INCLUDEPATH += $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include\opencv2) \

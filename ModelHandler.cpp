@@ -69,6 +69,14 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             unet_onnx_deploy->set_Show_image(display);
             modelInference = unet_onnx_deploy;
             this->start();
+        }else if("keyPointRcnn" == info.modelType)
+        {
+            qDebug() << "info.modelType: " << info.modelType;
+            keyPointRcnn_onnx_deploy = std::make_shared<keyPointRcnn>("D:/project/ort-deploy/keypointrcnn_resnet50_fpn.onnx", info.filePath.toStdString(),
+                                                                      "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
+            keyPointRcnn_onnx_deploy->set_Show_image(display);
+            modelInference = keyPointRcnn_onnx_deploy;
+            this->start();
         }
         else {
             qDebug() << "models deploys not supported!!!";
