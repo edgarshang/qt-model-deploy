@@ -77,6 +77,14 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             keyPointRcnn_onnx_deploy->set_Show_image(display);
             modelInference = keyPointRcnn_onnx_deploy;
             this->start();
+        }else if("YOLOv8_Pose" == info.modelType)
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            yolov8_pose_deploy = std::make_shared<Yolov8_KeyPoint>("D:/project/ort-deploy/yolov8n-pose.onnx", info.filePath.toStdString(),
+                                                                   "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
+            yolov8_pose_deploy->set_Show_image(display);
+            modelInference = yolov8_pose_deploy;
+            this->start();
         }
         else {
             qDebug() << "models deploys not supported!!!";
