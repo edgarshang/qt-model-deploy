@@ -5,6 +5,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QSettings>
+#include <QDoubleValidator>
 
 const char *modetye[] = {"resnet18", "YOLOv5", "YOLOv8", "RetinaNet", "FasterRcnn", "YOLOv5_Seg",
                          "YOLOv8_Seg", "MaskRcnn", "DeepLabV3", "Unet", "keyPointRcnn", "YOLOv8_Pose",
@@ -53,9 +54,28 @@ QWidget& Deploy::uiStackWidgetInit()
     QLabel *pathLabel = new QLabel(tr("path:"));
     pathLineEdit = new QLineEdit();
 
+    QLabel *scoredLabel = new QLabel(tr("scores:"));
+    scoresThresholdEdit = new QLineEdit(tr("0.45"));
+    QLabel *confLabel = new QLabel(tr("confidence:"));
+    confThresholdEdit = new QLineEdit(tr("0.25"));
+
+    QDoubleValidator* adoubleValidator = new QDoubleValidator(0.01, 0.99, 2, this);
+    scoresThresholdEdit->setValidator(adoubleValidator);
+    confThresholdEdit->setValidator(adoubleValidator);
+
+
+
     QHBoxLayout *pathLayout = new QHBoxLayout;
     pathLayout->addWidget(pathLabel);
     pathLayout->addWidget(pathLineEdit);
+
+    QHBoxLayout *scoredLayout = new QHBoxLayout;
+    scoredLayout->addWidget(scoredLabel);
+    scoredLayout->addWidget(scoresThresholdEdit);
+
+    QHBoxLayout *confLayout = new QHBoxLayout;
+    confLayout->addWidget(confLabel);
+    confLayout->addWidget(confThresholdEdit);
 
     QGroupBox *DeployModelTypeGroupBox = new QGroupBox(tr("Deploy ModeType"));
     onnxruntimeRadioBtn = new QRadioButton(tr("&onnxruntime"));
@@ -69,6 +89,8 @@ QWidget& Deploy::uiStackWidgetInit()
 
     QVBoxLayout *configLayout = new QVBoxLayout;
     configLayout->addLayout(pathLayout);
+    configLayout->addLayout(scoredLayout);
+    configLayout->addLayout(confLayout);
     configLayout->addWidget(DeployModelTypeGroupBox);
     configLayout->addStretch(1);
     stackWidgetGroup.setLayout(configLayout);
@@ -119,7 +141,8 @@ void Deploy::onPushButtonClick()
         modelTypeInfo.filePath = pathLineEdit->text();
         modelTypeInfo.modelType = modetye[leftModeListWidget.currentRow()];
         modelTypeInfo.deploymode = onnxruntimeRadioBtn->isChecked() ? OnnxRunTime : Openvino;
-
+        modelTypeInfo.scores = this->scoresThresholdEdit->text().toFloat();
+        modelTypeInfo.conf = this->confThresholdEdit->text().toFloat();
 //        qDebug() << modelTypeInfo.modelType;
 //        qDebug() << modelTypeInfo.deploymode;
 //        qDebug() << modelTypeInfo.filePath;

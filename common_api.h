@@ -17,6 +17,8 @@ typedef struct
     QString modelType;
     QString filePath;
     DeployMode deploymode;
+    float scores;
+    float conf;
 
 }modelTypeInfo_;
 

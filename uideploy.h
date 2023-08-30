@@ -42,6 +42,8 @@ public: // button
     QPushButton* RunButton;
 
     QLineEdit *pathLineEdit;
+    QLineEdit *scoresThresholdEdit;
+    QLineEdit *confThresholdEdit;
     QRadioButton *onnxruntimeRadioBtn;
     QRadioButton *opvinoRadioBtn;
 
