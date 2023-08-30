@@ -93,7 +93,7 @@ void FasterRcnn::post_image_process(std::vector<Ort::Value> &outputs, cv::Mat &i
 
 
     auto outShape = outputs[0].GetTensorTypeAndShapeInfo().GetShape();
-    size_t rows = outShape[0];
+    int rows = outShape[0];
 
     std::cout << "fixed number: " << rows << std::endl;
 

@@ -106,7 +106,6 @@ void Unet::post_image_process(std::vector<Ort::Value> &outputs, cv::Mat &inputim
     cv::Mat result = cv::Mat::zeros(cv::Size(out_w, out_h), CV_8UC1);
     for (int row = 0; row < out_h; row++) {
         for (int col = 0; col < out_w; col++) {
-            int max_index = 0;
             float f1 = mask_data[row*out_w + col];
             float f2 = mask_data[1*step + row*out_w + col];
             if (f1 > f2) {

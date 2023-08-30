@@ -1,21 +1,17 @@
 #include <QApplication>
-#include <opencv2/opencv.hpp>
-#include <inference_engine.hpp>
-#include <onnxruntime_cxx_api.h>
-#include <cpu_provider_factory.h>
-#include <fstream>
 #include "uideploy.h"
-#include "ort_tutorial.h"
 #include "ModelHandler.h"
 
-using namespace InferenceEngine;
+#include <openvino/openvino.hpp>
+
+
 using namespace cv;
 using namespace std;
+using namespace ov;
 
 
 int main(int argc, char *argv[])
 {
-
     QApplication a(argc, argv);
     Deploy w;
 

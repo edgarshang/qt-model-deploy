@@ -82,7 +82,7 @@ void MaskRcnn_Seg_Onnx::post_image_process(std::vector<Ort::Value> &outputs, cv:
     const float* mask_prob = outputs[3].GetTensorMutableData<float>();
 
     auto outShape = outputs[0].GetTensorTypeAndShapeInfo().GetShape();
-    size_t rows = outShape[0];
+    int rows = outShape[0];
 
     std::cout << "fixed number: " << rows << std::endl;
 

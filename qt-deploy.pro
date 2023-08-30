@@ -54,35 +54,57 @@ HEADERS += \
     Yolov8_KeyPoint.h \
     Yolov6_Face.h
 
-INCLUDEPATH += $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include) \
-               $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\include\opencv2) \
-               $$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\deployment_tools\inference_engine\include) \
-               D:\project\onnxruntime-win-x64-1.13.1\include
+INCLUDEPATH += $$quote(D:\project\OpenCV\opencvcode\build\include) \
+               $$quote(D:\project\OpenCV\opencvcode\build\include\opencv2) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\include) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\include\ie) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\include\ngraph) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\include\openvino) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\runtime\3rdparty\tbb\include) \
+               $$quote(D:\project\onnxruntime-win-x64-1.13.1\include)
 
-LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\lib) \
-        -lopencv_calib3d453 \
-        -lopencv_core453 \
-        -lopencv_dnn453 \
-        -lopencv_features2d453 \
-        -lopencv_flann453 \
-        -lopencv_gapi453 \
-        -lopencv_highgui453 \
-        -lopencv_imgcodecs453 \
-        -lopencv_imgproc453 \
-        -lopencv_ml453 \
-        -lopencv_objdetect453 \
-        -lopencv_photo453 \
-        -lopencv_stitching453 \
-        -lopencv_video453 \
-        -lopencv_videoio453
+#LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\lib) \
+#        -lopencv_calib3d453 \
+#        -lopencv_core453 \
+#        -lopencv_dnn453 \
+#        -lopencv_features2d453 \
+#        -lopencv_flann453 \
+#        -lopencv_gapi453 \
+#        -lopencv_highgui453 \
+#        -lopencv_imgcodecs453 \
+#        -lopencv_imgproc453 \
+#        -lopencv_ml453 \
+#        -lopencv_objdetect453 \
+#        -lopencv_photo453 \
+#        -lopencv_stitching453 \
+#        -lopencv_video453 \
+#        -lopencv_videoio453
+LIBS += -L$$quote(D:\project\OpenCV\opencvcode\build\x64\vc15\lib) \
+        -lopencv_world454
 
-LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\deployment_tools\inference_engine\lib\intel64\Release) \
-        -linference_engine \
-        -linference_engine_c_api \
-        -linference_engine_transformations
+#LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\deployment_tools\inference_engine\lib\intel64\Release) \
+#        -linference_engine \
+#        -linference_engine_c_api \
+#        -linference_engine_transformations
 
 LIBS += -L$$quote(D:\project\onnxruntime-win-x64-1.13.1\lib) \
         -lonnxruntime \
         -lonnxruntime_providers_shared
+
+LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\3rdparty\tbb\lib) \
+        -ltbb \
+        -ltbb12 \
+        -ltbbbind_2_5 \
+        -ltbbmalloc \
+        -ltbbmalloc_proxy
+
+LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\lib\intel64\Release) \
+        -lopenvino \
+        -llibprotobuf-lite \
+        -lopenvino_pytorch_frontend \
+        -lopenvino_c \
+        -lopenvino_onnx_frontend
+
+
 
 

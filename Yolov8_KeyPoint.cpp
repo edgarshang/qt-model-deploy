@@ -143,7 +143,7 @@ void Yolov8_KeyPoint::post_image_process(std::vector<Ort::Value> &outputs, cv::M
 
     // NMS
     std::vector<int> indexes;
-    cv::dnn::NMSBoxes(boxes, confidences, 0.25, 0.45, indexes);
+    cv::dnn::NMSBoxes(boxes, confidences, (float)(0.25), (float)(0.45), indexes);
     for(size_t i = 0; i < indexes.size(); i++)
     {
         int idx = indexes[i];

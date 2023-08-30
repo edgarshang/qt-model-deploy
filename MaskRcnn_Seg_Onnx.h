@@ -5,7 +5,6 @@
 #include <onnxruntime_cxx_api.h>
 #include <cpu_provider_factory.h>
 #include <opencv2/opencv.hpp>
-#include <inference_engine.hpp>
 #include <fstream>
 #include "common_api.h"
 

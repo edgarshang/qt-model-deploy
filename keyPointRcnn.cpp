@@ -85,7 +85,7 @@ void keyPointRcnn::post_image_process(std::vector<Ort::Value> &outputs, cv::Mat 
     const float* multiple_kypts = outputs[3].GetTensorMutableData<float>();
 
     auto outShape = outputs[0].GetTensorTypeAndShapeInfo().GetShape();
-    size_t rows = outShape[0];
+    int rows = outShape[0];
 
     std::cout << "fixed number: " << rows << std::endl;
 
