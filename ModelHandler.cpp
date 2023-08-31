@@ -11,10 +11,7 @@ ModelHandler::ModelHandler(Show *imageDisplay)
 
 void ModelHandler::processor(modelTypeInfo_ &info)
 {
-//    qDebug() << "imageProcess...";
-//    qDebug() << info.modelType;
-//    qDebug() << info.deploymode;
-//    qDebug() << info.filePath;
+
     if( info.deploymode == OnnxRunTime)
     {
         qDebug() << "onnxruntime";
@@ -106,6 +103,19 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             unet_openvino_deploy = std::make_shared<Unet_Road_Openvino>("D:/project/ort-deploy/unet_road.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
             unet_openvino_deploy->set_Show_image(display);
             modelInference = unet_openvino_deploy;
+            this->start();
+        }else if(info.modelType == YOLOV5)
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            modelInfo.modelPath = "D:/project/ort-deploy/yolov5s.onnx";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+            yolov5_openvino_deploy = std::make_shared<Yolov5_Openvino_Deploy>(modelInfo);
+            yolov5_openvino_deploy->set_Show_image(display);
+            modelInference = yolov5_openvino_deploy;
             this->start();
         }
     }

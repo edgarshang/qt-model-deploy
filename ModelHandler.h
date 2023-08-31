@@ -17,6 +17,7 @@
 #include "Yolov8_KeyPoint.h"
 #include "Yolov6_Face.h"
 #include "Unet_Road_Openvino.h"
+#include "Yolov5_Openvino_Deploy.h"
 
 
 class ModelHandler : public QThread,  public ImageProcessor
@@ -39,6 +40,9 @@ public:
     std::shared_ptr<Yolov8_KeyPoint> yolov8_pose_deploy;
     std::shared_ptr<Yolov6_Face> yolov6_face_deploy;
     std::shared_ptr<Unet_Road_Openvino> unet_openvino_deploy;
+    std::shared_ptr<Yolov5_Openvino_Deploy> yolov5_openvino_deploy;
+
+    modelConfInfo_ modelInfo;
 
 protected:
     void run();

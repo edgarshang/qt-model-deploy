@@ -22,6 +22,17 @@ typedef struct
 
 }modelTypeInfo_;
 
+typedef struct
+{
+    std::string modelPath;
+    std::string imagePath;
+    std::string label_text;
+    std::string modelType;
+    float scoresThreshold;
+    float confienceThreshold;
+}modelConfInfo_;
+
+
 
 class Common_API
 {
