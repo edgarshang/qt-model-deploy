@@ -37,7 +37,8 @@ SOURCES += \
     Unet.cpp \
     keyPointRcnn.cpp \
     Yolov8_KeyPoint.cpp \
-    Yolov6_Face.cpp
+    Yolov6_Face.cpp \
+    Unet_Road_Openvino.cpp
 
 HEADERS += \
     uideploy.h \
@@ -52,7 +53,8 @@ HEADERS += \
     Unet.h \
     keyPointRcnn.h \
     Yolov8_KeyPoint.h \
-    Yolov6_Face.h
+    Yolov6_Face.h \
+    Unet_Road_Openvino.h
 
 INCLUDEPATH += $$quote(D:\project\OpenCV\opencvcode\build\include) \
                $$quote(D:\project\OpenCV\opencvcode\build\include\opencv2) \

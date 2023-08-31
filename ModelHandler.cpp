@@ -100,6 +100,14 @@ void ModelHandler::processor(modelTypeInfo_ &info)
     }else if (info.deploymode == Openvino)
     {
         qDebug() << "openvino";
+        if("Unet" == info.modelType)
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            unet_openvino_deploy = std::make_shared<Unet_Road_Openvino>("D:/project/ort-deploy/unet_road.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
+            unet_openvino_deploy->set_Show_image(display);
+            modelInference = unet_openvino_deploy;
+            this->start();
+        }
     }
 }
 
