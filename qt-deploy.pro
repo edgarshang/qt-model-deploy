@@ -56,11 +56,11 @@ HEADERS += \
 
 INCLUDEPATH += $$quote(D:\project\OpenCV\opencvcode\build\include) \
                $$quote(D:\project\OpenCV\opencvcode\build\include\opencv2) \
-               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\include) \
-               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\include\ie) \
-               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\include\ngraph) \
-               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\include\openvino) \
-               $$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\runtime\3rdparty\tbb\include) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\include) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\include\ie) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\include\ngraph) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\include\openvino) \
+               $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\3rdparty\tbb\include) \
                $$quote(D:\project\onnxruntime-win-x64-1.13.1\include)
 
 #LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\lib) \
@@ -91,20 +91,18 @@ LIBS += -L$$quote(D:\project\onnxruntime-win-x64-1.13.1\lib) \
         -lonnxruntime \
         -lonnxruntime_providers_shared
 
-LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\3rdparty\tbb\lib) \
+LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\3rdparty\tbb\lib) \
         -ltbb \
-        -ltbb12 \
-        -ltbbbind_2_5 \
+        -ltbb_preview \
+        -ltbbbind \
         -ltbbmalloc \
-        -ltbbmalloc_proxy
+        -ltbbmalloc_proxy \
+        -ltbbproxy
 
-LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2023.1\runtime\lib\intel64\Release) \
+LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\lib\intel64\Release) \
         -lopenvino \
-        -llibprotobuf-lite \
-        -lopenvino_pytorch_frontend \
         -lopenvino_c \
         -lopenvino_onnx_frontend
-
 
 
 
