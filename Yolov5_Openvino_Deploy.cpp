@@ -21,7 +21,7 @@ Yolov5_Openvino_Deploy::~Yolov5_Openvino_Deploy()
 
 void Yolov5_Openvino_Deploy::get_model_info()
 {
-    compiled_model = ie.compile_model("D:/project/ort-deploy/yolov5s.onnx", "CPU");
+    compiled_model = ie.compile_model(model_path, "CPU");
     infer_request = compiled_model.create_infer_request();
 
     input_tensor = infer_request.get_input_tensor();

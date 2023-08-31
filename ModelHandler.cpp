@@ -104,10 +104,10 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             unet_openvino_deploy->set_Show_image(display);
             modelInference = unet_openvino_deploy;
             this->start();
-        }else if(info.modelType == YOLOV5)
+        }else if(info.modelType == YOLOV5 || YOLOV8 == info.modelType)
         {
             qDebug() << "info.modeyType: " << info.modelType;
-            modelInfo.modelPath = "D:/project/ort-deploy/yolov5s.onnx";
+            modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.onnx":"D:/project/ort-deploy/yolov8n.onnx");
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
             modelInfo.modelType = info.modelType.toStdString();
