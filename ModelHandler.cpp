@@ -132,6 +132,21 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             yolov5_seg_openvino_deploy->set_Show_image(display);
             modelInference = yolov5_seg_openvino_deploy;
             this->start();
+        }else if( "YOLOv8_Pose" == info.modelType )
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            modelInfo.modelPath = "D:/project/ort-deploy/yolov8n-pose.onnx";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            yolov8_keypoint_openvino_deploy = std::make_shared<Yolov8_KeyPoint_Openvino>(modelInfo);
+            yolov8_keypoint_openvino_deploy->set_Show_image(display);
+            modelInference = yolov8_keypoint_openvino_deploy;
+            this->start();
+
         }
     }
 }
