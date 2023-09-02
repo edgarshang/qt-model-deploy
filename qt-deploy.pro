@@ -45,7 +45,8 @@ SOURCES += \
     Yolov6_Face_Openvino.cpp \
     MaskRcnn_Seg_Openvino_Deploy.cpp \
     keyPointRcnn_Openvino_Deploy.cpp \
-    FastRcnn_Openvino_Deploy.cpp
+    FastRcnn_Openvino_Deploy.cpp \
+    DeepLabV3_Openvino_Deploy.cpp
 
 HEADERS += \
     uideploy.h \
@@ -68,7 +69,8 @@ HEADERS += \
     Yolov6_Face_Openvino.h \
     MaskRcnn_Seg_Openvino_Deploy.h \
     keyPointRcnn_Openvino_Deploy.h \
-    FastRcnn_Openvino_Deploy.h
+    FastRcnn_Openvino_Deploy.h \
+    DeepLabV3_Openvino_Deploy.h
 
 INCLUDEPATH += $$quote(D:\project\OpenCV\opencvcode\build\include) \
                $$quote(D:\project\OpenCV\opencvcode\build\include\opencv2) \

@@ -205,6 +205,21 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             modelInference = fasterrcnn_openvino_deploy;
             this->start();
 
+        }else if( "DeepLabV3" == info.modelType )
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            modelInfo.modelPath = "D:/project/ort-deploy/deeplabv3_mobilenet.onnx";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            deeplabv3_openvino_deploy = std::make_shared<DeepLabV3_Openvino_Deploy>(modelInfo);
+            deeplabv3_openvino_deploy->set_Show_image(display);
+            modelInference = deeplabv3_openvino_deploy;
+            this->start();
+
         }
     }
 }
