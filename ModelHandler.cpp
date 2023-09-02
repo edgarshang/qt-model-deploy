@@ -175,6 +175,20 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             maskrcnn_seg_openvino_deploy->set_Show_image(display);
             modelInference = maskrcnn_seg_openvino_deploy;
             this->start();
+        }else if( "keyPointRcnn" == info.modelType )
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            modelInfo.modelPath = "D:/project/ort-deploy/keypointrcnn_resnet50_fpn.onnx";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            keypointrcnn_openvino_deploy = std::make_shared<keyPointRcnn_Openvino_Deploy>(modelInfo);
+            keypointrcnn_openvino_deploy->set_Show_image(display);
+            modelInference = keypointrcnn_openvino_deploy;
+            this->start();
         }
     }
 }
