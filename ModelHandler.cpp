@@ -220,6 +220,20 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             modelInference = deeplabv3_openvino_deploy;
             this->start();
 
+        }else if( info.modelType == "resnet18" )
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            modelInfo.modelPath = "D:/project/ort-deploy/resnet18.onnx";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/imagenet_classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            resnet18_openvino_deploy = std::make_shared<Resnet18_Openvino_Deploy> (modelInfo);
+            resnet18_openvino_deploy->set_Show_image(display);
+            modelInference = resnet18_openvino_deploy;
+            this->start();
         }
     }
 }
