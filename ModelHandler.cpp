@@ -147,6 +147,20 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             modelInference = yolov8_keypoint_openvino_deploy;
             this->start();
 
+        }else if( "Yolov6_FaceLandMark" == info.modelType )
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            modelInfo.modelPath = "D:/project/ort-deploy/yolov6n_face.onnx";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            yolov6_face_openvino_deploy = std::make_shared<Yolov6_Face_Openvino_Deploy>(modelInfo);
+            yolov6_face_openvino_deploy->set_Show_image(display);
+            modelInference = yolov6_face_openvino_deploy;
+            this->start();
         }
     }
 }
