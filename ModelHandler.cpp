@@ -161,6 +161,20 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             yolov6_face_openvino_deploy->set_Show_image(display);
             modelInference = yolov6_face_openvino_deploy;
             this->start();
+        }else if( info.modelType == "MaskRcnn" )
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            modelInfo.modelPath = "D:/project/ort-deploy/mask_rcnn.onnx";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            maskrcnn_seg_openvino_deploy = std::make_shared<MaskRcnn_Seg_Openvino_Deploy>(modelInfo);
+            maskrcnn_seg_openvino_deploy->set_Show_image(display);
+            modelInference = maskrcnn_seg_openvino_deploy;
+            this->start();
         }
     }
 }
