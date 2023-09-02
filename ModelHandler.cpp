@@ -189,6 +189,22 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             keypointrcnn_openvino_deploy->set_Show_image(display);
             modelInference = keypointrcnn_openvino_deploy;
             this->start();
+        }else if( info.modelType == "FasterRcnn" || info.modelType == "RetinaNet" )
+        {
+            qDebug() << "info.modeyType: " << info.modelType;
+            modelInfo.modelPath = (info.modelType == "FasterRcnn" ? "D:/project/ort-deploy/faster_rcnn.onnx":"D:/project/ort-deploy/retinanet_resnet50_fpn.onnx");
+//            modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.onnx":"D:/project/ort-deploy/yolov8n.onnx");
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            fasterrcnn_openvino_deploy = std::make_shared<FastRcnn_Openvino_Deploy> (modelInfo);
+            fasterrcnn_openvino_deploy->set_Show_image(display);
+            modelInference = fasterrcnn_openvino_deploy;
+            this->start();
+
         }
     }
 }

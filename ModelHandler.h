@@ -23,6 +23,7 @@
 #include "Yolov6_Face_Openvino.h"
 #include "MaskRcnn_Seg_Openvino_Deploy.h"
 #include "keyPointRcnn_Openvino_Deploy.h"
+#include "FastRcnn_Openvino_Deploy.h"
 
 
 class ModelHandler : public QThread,  public ImageProcessor
@@ -51,6 +52,7 @@ public:
     std::shared_ptr<Yolov6_Face_Openvino_Deploy> yolov6_face_openvino_deploy;
     std::shared_ptr<MaskRcnn_Seg_Openvino_Deploy> maskrcnn_seg_openvino_deploy;
     std::shared_ptr<keyPointRcnn_Openvino_Deploy> keypointrcnn_openvino_deploy;
+    std::shared_ptr<FastRcnn_Openvino_Deploy> fasterrcnn_openvino_deploy;
 
     modelConfInfo_ modelInfo;
 
