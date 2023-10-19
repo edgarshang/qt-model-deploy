@@ -81,7 +81,9 @@ INCLUDEPATH += $$quote(D:\project\OpenCV\opencvcode\build\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\include\ngraph) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\include\openvino) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\3rdparty\tbb\include) \
-               $$quote(D:\project\onnxruntime-win-x64-1.13.1\include)
+               $$quote(D:\project\onnxruntime-win-x64-1.13.1\include) \
+               $$quote(D:\project\TensorRT-8.6.0.12\include) \
+               $$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include)
 
 #LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\lib) \
 #        -lopencv_calib3d453 \
@@ -123,6 +125,51 @@ LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\lib\intel
         -lopenvino \
         -lopenvino_c \
         -lopenvino_onnx_frontend
+
+LIBS += -L$$quote(D:\project\TensorRT-8.6.0.12\lib) \
+        -lnvinfer \
+        -lnvinfer_dispatch \
+        -lnvinfer_lean \
+        -lnvinfer_plugin \
+        -lnvinfer_vc_plugin \
+        -lnvonnxparser \
+        -lnvparsers
+
+LIBS += -L$$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\lib\x64) \
+        -lcublas \
+        -lcublasLt \
+        -lcuda \
+        -lcudadevrt \
+        -lcudart \
+        -lcudart_static \
+        -lcufft \
+        -lcufftw \
+        -lcufilt \
+        -lcurand \
+        -lcusolver \
+        -lcusolverMg \
+        -lcusparse \
+        -lnppc \
+        -lnppial \
+        -lnppicc \
+        -lnppidei \
+        -lnppif \
+        -lnppig \
+        -lnppim \
+        -lnppist \
+        -lnppisu \
+        -lnppitc \
+        -lnpps \
+        -lnvblas \
+        -lnvJitLink \
+        -lnvJitLink_static \
+        -lnvjpeg \
+        -lnvml \
+        -lnvptxcompiler_static \
+        -lnvrtc-builtins_static \
+        -lnvrtc \
+        -lnvrtc_static \
+        -lOpenCL
 
 
 
