@@ -83,7 +83,8 @@ INCLUDEPATH += $$quote(D:\project\OpenCV\opencvcode\build\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\3rdparty\tbb\include) \
                $$quote(D:\project\onnxruntime-win-x64-1.13.1\include) \
                $$quote(D:\project\TensorRT-8.6.0.12\include) \
-               $$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\include)
+               $$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.6\include) \
+               $$quote(D:\appSoftware\ffmpeg-6.1-full_build-shared\include)
 
 #LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2021.4.752\opencv\lib) \
 #        -lopencv_calib3d453 \
@@ -135,7 +136,7 @@ LIBS += -L$$quote(D:\project\TensorRT-8.6.0.12\lib) \
         -lnvonnxparser \
         -lnvparsers
 
-LIBS += -L$$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\lib\x64) \
+LIBS += -L$$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.6\lib\x64) \
         -lcublas \
         -lcublasLt \
         -lcuda \
@@ -161,8 +162,6 @@ LIBS += -L$$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\lib\x
         -lnppitc \
         -lnpps \
         -lnvblas \
-        -lnvJitLink \
-        -lnvJitLink_static \
         -lnvjpeg \
         -lnvml \
         -lnvptxcompiler_static \
@@ -170,6 +169,20 @@ LIBS += -L$$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.2\lib\x
         -lnvrtc \
         -lnvrtc_static \
         -lOpenCL
+
+LIBS += -L$$quote(D:\appSoftware\ffmpeg-6.1-full_build-shared\lib) \
+        -lavcodec \
+        -lavdevice \
+        -lavfilter \
+        -lavformat \
+        -lavutil \
+        -lpostproc \
+        -lswresample \
+        -lswscale
+
+
+
+
 
 
 

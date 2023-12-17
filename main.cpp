@@ -33,19 +33,19 @@ class Logger :public ILogger
 int main(int argc, char *argv[])
 {
 
-    printf("hello, wrold");
+//    printf("hello, wrold");
 
-        auto builder = createInferBuilder(gLogger);
-        builder->getLogger()->log(nvinfer1::ILogger::Severity::kERROR, "Create Builder...");
+//        auto builder = createInferBuilder(gLogger);
+//        builder->getLogger()->log(nvinfer1::ILogger::Severity::kERROR, "Create Builder...");
 
-        return 0;
-//    QApplication a(argc, argv);
-//    Deploy w;
+//        return 0;
+    QApplication a(argc, argv);
+    Deploy w;
 
-//    ModelHandler modelHandle(&w);
-//    w.setImageProcesser(&modelHandle);
+    ModelHandler modelHandle(&w);
+    w.setImageProcesser(&modelHandle);
 
-//    w.show();
+    w.show();
 
-//    return a.exec();
+    return a.exec();
 }
