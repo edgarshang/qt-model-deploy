@@ -9,7 +9,7 @@
 
 const char *modetye[] = {"resnet18", "YOLOv5", "YOLOv8", "RetinaNet", "FasterRcnn", "YOLOv5_Seg",
                          "YOLOv8_Seg", "MaskRcnn", "DeepLabV3", "Unet", "keyPointRcnn", "YOLOv8_Pose",
-                        "Yolov6_FaceLandMark"};
+                        "Yolov6_FaceLandMark", "FFmpeg"};
 
 Deploy::Deploy(QWidget *parent)
     : QWidget(parent)
@@ -39,9 +39,9 @@ void Deploy::imageshow(cv::Mat &image)
 QWidget& Deploy::uileftModelInit()
 {
 
-    for(int i = 0; i < sizeof(modetye)/sizeof(modetye[0]); i++)
+    for(unsigned long long i = 0; i < sizeof(modetye)/sizeof(modetye[0]); i++)
     {
-        leftModeListWidget.insertItem(i, modetye[i]);
+        leftModeListWidget.insertItem(static_cast<int>(i), modetye[i]);
     }
 
     return leftModeListWidget;
