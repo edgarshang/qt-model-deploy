@@ -11,7 +11,7 @@ ModelHandler::ModelHandler(Show *imageDisplay)
 
 void ModelHandler::processor(modelTypeInfo_ &info)
 {
-
+    qDebug() << "info.modeyType: " << info.modelType;
     if( info.deploymode == OnnxRunTime)
     {
         qDebug() << "onnxruntime";
@@ -76,7 +76,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if("YOLOv8_Pose" == info.modelType)
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             yolov8_pose_deploy = std::make_shared<Yolov8_KeyPoint>("D:/project/ort-deploy/yolov8n-pose.onnx", info.filePath.toStdString(),
                                                                    "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
             yolov8_pose_deploy->set_Show_image(display);
@@ -84,7 +83,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if("Yolov6_FaceLandMark" == info.modelType)
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             yolov6_face_deploy = std::make_shared<Yolov6_Face>("D:/project/ort-deploy/yolov6n_face.onnx", info.filePath.toStdString(),
                                                                "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
             yolov6_face_deploy->set_Show_image(display);
@@ -99,14 +97,12 @@ void ModelHandler::processor(modelTypeInfo_ &info)
         qDebug() << "openvino";
         if("Unet" == info.modelType)
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             unet_openvino_deploy = std::make_shared<Unet_Road_Openvino>("D:/project/ort-deploy/unet_road.onnx", info.filePath.toStdString(), "D:/project/ort-deploy/classes.txt", info.modelType.toStdString());
             unet_openvino_deploy->set_Show_image(display);
             modelInference = unet_openvino_deploy;
             this->start();
         }else if(info.modelType == YOLOV5 || YOLOV8 == info.modelType)
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.onnx":"D:/project/ort-deploy/yolov8n.onnx");
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
@@ -119,7 +115,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if(info.modelType == YOLOV5_SEG || YOLOV8_SEG == info.modelType)
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             modelInfo.modelPath = (info.modelType == YOLOV5_SEG ? "D:/project/ort-deploy/yolov5s-seg.onnx":"D:/project/ort-deploy/yolov8n-seg.onnx");
 //            modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.onnx":"D:/project/ort-deploy/yolov8n.onnx");
             modelInfo.imagePath = info.filePath.toStdString();
@@ -134,7 +129,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if( "YOLOv8_Pose" == info.modelType )
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             modelInfo.modelPath = "D:/project/ort-deploy/yolov8n-pose.onnx";
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
@@ -148,8 +142,7 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
 
         }else if( "Yolov6_FaceLandMark" == info.modelType )
-        {
-            qDebug() << "info.modeyType: " << info.modelType;
+        {     
             modelInfo.modelPath = "D:/project/ort-deploy/yolov6n_face.onnx";
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
@@ -163,7 +156,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if( info.modelType == "MaskRcnn" )
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             modelInfo.modelPath = "D:/project/ort-deploy/mask_rcnn.onnx";
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
@@ -177,7 +169,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if( "keyPointRcnn" == info.modelType )
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             modelInfo.modelPath = "D:/project/ort-deploy/keypointrcnn_resnet50_fpn.onnx";
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
@@ -191,7 +182,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if( info.modelType == "FasterRcnn" || info.modelType == "RetinaNet" )
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             modelInfo.modelPath = (info.modelType == "FasterRcnn" ? "D:/project/ort-deploy/faster_rcnn.onnx":"D:/project/ort-deploy/retinanet_resnet50_fpn.onnx");
 //            modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.onnx":"D:/project/ort-deploy/yolov8n.onnx");
             modelInfo.imagePath = info.filePath.toStdString();
@@ -207,7 +197,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
 
         }else if( "DeepLabV3" == info.modelType )
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             modelInfo.modelPath = "D:/project/ort-deploy/deeplabv3_mobilenet.onnx";
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
@@ -222,7 +211,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
 
         }else if( info.modelType == "resnet18" )
         {
-            qDebug() << "info.modeyType: " << info.modelType;
             modelInfo.modelPath = "D:/project/ort-deploy/resnet18.onnx";
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/imagenet_classes.txt";
@@ -235,6 +223,10 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             modelInference = resnet18_openvino_deploy;
             this->start();
         }
+    }else if(info.deploymode == TensorRT)
+    {
+        qDebug() << "the info.deploymode == TensorRT";
+
     }
 }
 

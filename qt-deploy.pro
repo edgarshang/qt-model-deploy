@@ -81,10 +81,19 @@ INCLUDEPATH += $$quote(D:\project\OpenCV\opencvcode\build\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\include\ngraph) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\include\openvino) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\3rdparty\tbb\include) \
-               $$quote(D:\project\onnxruntime-win-x64-1.13.1\include)
+               $$quote(D:\project\onnxruntime-win-x64-1.13.1\include) \
+               $$quote(D:\software-pack\TensorRT-10.6.0.26.Windows.win10.cuda-12.6\TensorRT-10.6.0.26\include)
 
 LIBS += -L$$quote(D:\project\OpenCV\opencvcode\build\x64\vc15\lib) \
         -lopencv_world454
+
+LISB += -L$$quote(D:\software-pack\TensorRT-10.6.0.26.Windows.win10.cuda-12.6\TensorRT-10.6.0.26\lib) \
+        -lnvinfer_10 \
+        -lnvinfer_dispatch_10 \
+        -lnvinfer_lean_10 \
+        -lnvinfer_plugin_10 \
+        -lnvinfer_vc_plugin_10 \
+        -lnvonnxparser_10
 
 
 

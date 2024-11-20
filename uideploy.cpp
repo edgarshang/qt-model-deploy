@@ -80,10 +80,12 @@ QWidget& Deploy::uiStackWidgetInit()
     QGroupBox *DeployModelTypeGroupBox = new QGroupBox(tr("Deploy ModeType"));
     onnxruntimeRadioBtn = new QRadioButton(tr("&onnxruntime"));
     opvinoRadioBtn      = new QRadioButton(tr("&openvino"));
+    tensorRtRadioBtn    = new QRadioButton(tr("&TensorRt"));
 
     QVBoxLayout *vbox = new QVBoxLayout;
     vbox->addWidget(onnxruntimeRadioBtn);
     vbox->addWidget(opvinoRadioBtn);
+    vbox->addWidget(tensorRtRadioBtn);
     vbox->addStretch(1);
     DeployModelTypeGroupBox->setLayout(vbox);
 
@@ -140,7 +142,7 @@ void Deploy::onPushButtonClick()
     {
         modelTypeInfo.filePath = pathLineEdit->text();
         modelTypeInfo.modelType = modetye[leftModeListWidget.currentRow()];
-        modelTypeInfo.deploymode = onnxruntimeRadioBtn->isChecked() ? OnnxRunTime : Openvino;
+        modelTypeInfo.deploymode = onnxruntimeRadioBtn->isChecked() ? OnnxRunTime : (opvinoRadioBtn->isChecked() ? Openvino : TensorRT);
         modelTypeInfo.scores = this->scoresThresholdEdit->text().toFloat();
         modelTypeInfo.conf = this->confThresholdEdit->text().toFloat();
 //        qDebug() << modelTypeInfo.modelType;

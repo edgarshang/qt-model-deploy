@@ -46,6 +46,7 @@ public: // button
     QLineEdit *confThresholdEdit;
     QRadioButton *onnxruntimeRadioBtn;
     QRadioButton *opvinoRadioBtn;
+    QRadioButton *tensorRtRadioBtn;
 
     modelTypeInfo_ modelTypeInfo;
 

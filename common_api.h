@@ -11,7 +11,7 @@
 #define YOLOV5_SEG "YOLOv5_Seg"
 #define YOLOV8_SEG "YOLOv8_Seg"
 
-enum DeployMode { OnnxRunTime, Openvino };
+enum DeployMode { OnnxRunTime, Openvino, TensorRT };
 typedef struct
 {
     QString modelType;
