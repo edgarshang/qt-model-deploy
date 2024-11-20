@@ -41,7 +41,7 @@ private:
     void* buffers[2] = {nullptr, nullptr};
     std::vector<float> prob;
 
-    IBuilder *m_build =  nullptr;
+    IBuilder *builder =  nullptr;
     IRuntime *m_runtime = nullptr;
     ICudaEngine *m_cudaEngine = nullptr;
     nvinfer1::IExecutionContext *m_context = nullptr;
@@ -50,8 +50,10 @@ private:
     int m_inputH = 224;
     int m_outputSize = 1000;
     Show *image_show = nullptr;
+    char* trtModeStream = nullptr;
 
-    int64 start_time;
+//    int64 start_time;
+//    int64 end_time;
 };
 
 #endif // RESNET18_TENSORRT_H
