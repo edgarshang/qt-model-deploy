@@ -52,7 +52,7 @@ private:
     Show *image_show = nullptr;
     char* trtModeStream = nullptr;
 
-//    int64 start_time;
+    int64 start_time;
 //    int64 end_time;
 };
 
