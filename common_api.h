@@ -5,11 +5,30 @@
 #include <vector>
 #include <opencv2/opencv.hpp>
 #include <QString>
+#include <NvInfer.h>
+#include <NvOnnxParser.h>
+#include <cuda.h>
+#include <cuda_runtime.h>
 
 #define YOLOV5  "YOLOv5"
 #define YOLOV8  "YOLOv8"
 #define YOLOV5_SEG "YOLOv5_Seg"
 #define YOLOV8_SEG "YOLOv8_Seg"
+
+using namespace nvinfer1;
+using namespace nvonnxparser;
+
+class Logger : public ILogger
+{
+    void  log(Severity severity, const char* msg) noexcept
+    {
+        if (severity != Severity::kINFO)
+        {
+            std::cout << msg << std::endl;
+        }
+    }
+};
+
 
 enum DeployMode { OnnxRunTime, Openvino, TensorRT };
 typedef struct

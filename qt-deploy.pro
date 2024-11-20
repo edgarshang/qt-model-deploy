@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+    resnet18_TensorRT.cpp \
     uideploy.cpp \
     ort_tutorial.cpp \
     common_api.cpp \
@@ -50,6 +51,7 @@ SOURCES += \
     Resnet18_Openvino_Deploy.cpp
 
 HEADERS += \
+    resnet18_TensorRT.h \
     uideploy.h \
     ort_tutorial.h \
     common_api.h \
@@ -82,18 +84,11 @@ INCLUDEPATH += $$quote(D:\project\OpenCV\opencvcode\build\include) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\include\openvino) \
                $$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\3rdparty\tbb\include) \
                $$quote(D:\project\onnxruntime-win-x64-1.13.1\include) \
-               $$quote(D:\software-pack\TensorRT-10.6.0.26.Windows.win10.cuda-12.6\TensorRT-10.6.0.26\include)
+               $$quote(D:\software-pack\TensorRT-10.6.0.26.Windows.win10.cuda-12.6\TensorRT-10.6.0.26\include) \
+               $$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\include)
 
 LIBS += -L$$quote(D:\project\OpenCV\opencvcode\build\x64\vc15\lib) \
         -lopencv_world454
-
-LISB += -L$$quote(D:\software-pack\TensorRT-10.6.0.26.Windows.win10.cuda-12.6\TensorRT-10.6.0.26\lib) \
-        -lnvinfer_10 \
-        -lnvinfer_dispatch_10 \
-        -lnvinfer_lean_10 \
-        -lnvinfer_plugin_10 \
-        -lnvinfer_vc_plugin_10 \
-        -lnvonnxparser_10
 
 
 
@@ -113,6 +108,52 @@ LIBS += -L$$quote(C:\Program Files (x86)\Intel\openvino_2022.3\runtime\lib\intel
         -lopenvino \
         -lopenvino_c \
         -lopenvino_onnx_frontend
+
+LIBS += -L$$quote(D:\software-pack\TensorRT-10.6.0.26.Windows.win10.cuda-12.6\TensorRT-10.6.0.26\lib) \
+        -lnvinfer_10 \
+        -lnvinfer_dispatch_10 \
+        -lnvinfer_lean_10 \
+        -lnvinfer_plugin_10 \
+        -lnvinfer_vc_plugin_10 \
+        -lnvonnxparser_10
+
+LIBS += -L$$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\lib\x64) \
+        -lcublas \
+        -lcublasLt \
+        -lcuda \
+        -lcudadevrt \
+        -lcudart \
+        -lcudart_static \
+        -lcufft \
+        -lcufftw \
+        -lcufilt \
+        -lcurand \
+        -lcusolver \
+        -lcusolverMg \
+        -lcusparse \
+        -lnppc \
+        -lnppial \
+        -lnppicc \
+        -lnppidei \
+        -lnppif \
+        -lnppig \
+        -lnppim \
+        -lnppist \
+        -lnppisu \
+        -lnppitc \
+        -lnpps \
+        -lnvblas \
+        -lnvfatbin \
+        -lnvfatbin_static \
+        -lnvJitLink \
+        -lnvJitLink_static \
+        -lnvjpeg \
+        -lnvml \
+        -lnvptxcompiler_static \
+        -lnvrtc-builtins_static \
+        -lnvrtc \
+        -lnvrtc_static \
+        -lOpenCL
 
 
 

@@ -227,6 +227,21 @@ void ModelHandler::processor(modelTypeInfo_ &info)
     {
         qDebug() << "the info.deploymode == TensorRT";
 
+        modelInfo.modelPath = "D:/project/ort-deploy/resnet18.engine";
+        modelInfo.imagePath = info.filePath.toStdString();
+        modelInfo.label_text = "D:/project/ort-deploy/imagenet_classes.txt";
+        modelInfo.modelType = info.modelType.toStdString();
+        modelInfo.scoresThreshold = info.scores;
+        modelInfo.confienceThreshold = info.conf;
+
+        if(info.modelType == "resnet18")
+        {
+            resnet18_tensorRT_deploy = std::make_shared<resnet18_TensorRT>(modelInfo);
+        }
+
+
+
+
     }
 }
 
