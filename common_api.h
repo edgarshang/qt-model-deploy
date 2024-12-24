@@ -59,6 +59,7 @@ public:
     static std::vector<std::string> readClassNames(std::string classNamePath);
     static float sigmoid_function(float a);
     static void draw_pose_keyPoint(const float* data, cv::Mat &input_image);
+    static int load_tensorRT_model(char **trtMode, const char* modelPath);
 };
 
 

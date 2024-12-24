@@ -230,6 +230,7 @@ void ModelHandler::processor(modelTypeInfo_ &info)
         if(info.modelType == "resnet18")
         {
             modelInfo.modelPath = "D:/project/ort-deploy/resnet18.engine";
+//            modelInfo.modelPath = "D:/project/ort-deploy/yolov5s.engine";
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/imagenet_classes.txt";
             modelInfo.modelType = info.modelType.toStdString();
@@ -239,6 +240,18 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             resnet18_tensorRT_deploy = std::make_shared<resnet18_TensorRT>(modelInfo);
             resnet18_tensorRT_deploy->set_Show_image(display);
             modelInference = resnet18_tensorRT_deploy;
+            this->start();
+        }else if( info.modelType == YOLOV5 || info.modelType == YOLOV8)
+        {
+            modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.engine":"D:/project/ort-deploy/yolov8n.engine");
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+            yolov5_tensorRT_deploy = std::make_shared<Yolov5_TensorRT_Deploy>(modelInfo);
+            yolov5_tensorRT_deploy->set_Show_image(display);
+            modelInference = yolov5_tensorRT_deploy;
             this->start();
         }
 

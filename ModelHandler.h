@@ -27,6 +27,7 @@
 #include "DeepLabV3_Openvino_Deploy.h"
 #include "Resnet18_Openvino_Deploy.h"
 #include "resnet18_TensorRT.h"
+#include "Yolov5_TensorRT_Deploy.h"
 
 
 class ModelHandler : public QThread,  public ImageProcessor
@@ -59,6 +60,7 @@ public:
     std::shared_ptr<DeepLabV3_Openvino_Deploy> deeplabv3_openvino_deploy;
     std::shared_ptr<Resnet18_Openvino_Deploy> resnet18_openvino_deploy;
     std::shared_ptr<resnet18_TensorRT> resnet18_tensorRT_deploy;
+    std::shared_ptr<Yolov5_TensorRT_Deploy> yolov5_tensorRT_deploy;
 
     modelConfInfo_ modelInfo;
 

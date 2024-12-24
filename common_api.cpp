@@ -41,6 +41,27 @@ void Common_API::draw_pose_keyPoint(const float* data, cv::Mat &inputimage)
     }
 }
 
+int Common_API::load_tensorRT_model(char **trtMode, const char* modelPath)
+{
+    int size = 0;
+    if(trtMode != nullptr)
+    {
+        std::ifstream file(modelPath, std::ios::binary);
+        if(file.good())
+        {
+            file.seekg(0, file.end);
+            size = file.tellg();
+            file.seekg(0, file.beg);
+            *trtMode = new char[size];
+            assert(*trtMode);
+            file.read(*trtMode, size);
+            file.close();
+        }
+    }
+
+    return size;
+}
+
 std::vector<std::string> Common_API::readClassNames(std::string classNamePath)
 {
     std::vector<std::string> classNames;
