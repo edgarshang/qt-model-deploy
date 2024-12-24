@@ -66,6 +66,8 @@ private:
     ICudaEngine *m_cudaEngine = nullptr;
     nvinfer1::IExecutionContext *m_context = nullptr;
     char* trtModeStream = nullptr;
+
+    bool m_runingFlag = true;
 };
 
 #endif // YOLOV5_ONNX_DEPLOY_H

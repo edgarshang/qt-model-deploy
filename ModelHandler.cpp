@@ -243,6 +243,7 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if( info.modelType == YOLOV5 || info.modelType == YOLOV8)
         {
+            qDebug() << "contruct";
             modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.engine":"D:/project/ort-deploy/yolov8n.engine");
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
@@ -254,11 +255,13 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             modelInference = yolov5_tensorRT_deploy;
             this->start();
         }
-
-
-
-
     }
+}
+
+ModelHandler::~ModelHandler()
+{
+    qDebug() << "~ModelHandler()";
+    wait();
 }
 
 void ModelHandler::run()

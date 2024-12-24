@@ -34,6 +34,7 @@ class ModelHandler : public QThread,  public ImageProcessor
 {
 public:
     ModelHandler(Show *imageDisplay);
+    ~ModelHandler();
     virtual void processor(modelTypeInfo_ &info);
     Show *display;
 
@@ -66,9 +67,6 @@ public:
 
 protected:
     void run();
-
-
-
 };
 
 #endif // MODELHANDLER_H

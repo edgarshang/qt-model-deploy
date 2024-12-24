@@ -10,34 +10,18 @@ using namespace cv;
 
 Yolov5_TensorRT_Deploy::Yolov5_TensorRT_Deploy(modelConfInfo_ info)
 {
-    model_path = info.modelPath;
-    image_path = info.imagePath;
-    label_path = info.label_text;
-    model = info.modelType;
-
 
     printf("hello, wrold\n");
     label_path = info.label_text;
     model_path = info.modelPath;
     image_path = info.imagePath;
+    model = info.modelType;
 
     labels = Common_API::readClassNames(label_path);
     m_builder = createInferBuilder(m_loger);
     m_builder->getLogger()->log(nvinfer1::ILogger::Severity::kERROR, "Create Builder...");
 
-    std::ifstream file(model_path, std::ios::binary);
-    int size = 0;
-    if (file.good())
-    {
-        file.seekg(0, file.end);
-        size = file.tellg();
-        file.seekg(0, file.beg);
-        trtModeStream = new char[size];
-        assert(trtModeStream);
-        file.read(trtModeStream, size);
-        file.close();
-    }
-
+    int size = Common_API::load_tensorRT_model(&trtModeStream, model_path.c_str());
     m_runtime = createInferRuntime(m_loger);
     m_cudaEngine = m_runtime->deserializeCudaEngine(trtModeStream, size);
     int numIOTensors = m_cudaEngine->getNbIOTensors();
@@ -47,15 +31,41 @@ Yolov5_TensorRT_Deploy::Yolov5_TensorRT_Deploy(modelConfInfo_ info)
     {
         const char* tensorName = m_cudaEngine->getIOTensorName(i);
         nvinfer1::TensorIOMode ioMode = m_cudaEngine->getTensorIOMode(tensorName);
-        std::cout << "the name is " << tensorName;
-        std::cout << " Tensor I/O Mode : " << (ioMode == nvinfer1::TensorIOMode::kINPUT ? "Input" : "Output") << std::endl;
+//        std::cout << "the name is " << tensorName;
+//        std::cout << " Tensor I/O Mode : " << (ioMode == nvinfer1::TensorIOMode::kINPUT ? "Input" : "Output") << std::endl;
 
         nvinfer1::Dims tensorDims = m_cudaEngine->getTensorShape(tensorName); // 获取张量维度
-        std::cout << "Tensor Dimensions: ";
-        for (int j = 0; j < tensorDims.nbDims; j++)
+//        std::cout << "Tensor Dimensions: ";
+        if(ioMode == nvinfer1::TensorIOMode::kINPUT)
         {
-            std::cout << tensorDims.d[j] << " ";   // 打印出张量维度
+            for (int j = 0; j < tensorDims.nbDims; j++)
+            {
+                std::cout << tensorDims.d[j] << " ";   // 打印出张量维度
+                if(j == 2)
+                {
+                    input_h = tensorDims.d[j];
+                }else if(j == 3)
+                {
+                    input_w = tensorDims.d[j];
+                }
+            }
+        }else if(ioMode == nvinfer1::TensorIOMode::kOUTPUT)
+        {
+            for (int j = 0; j < tensorDims.nbDims; j++)
+            {
+                std::cout << tensorDims.d[j] << " ";   // 打印出张量维度
+                if(j == 1)
+                {
+                    out_num = tensorDims.d[j];
+                }else if(j == 2)
+                {
+                    out_ch = tensorDims.d[j];
+                }
+
+
+            }
         }
+
 
         std::cout << std::endl;
     }
@@ -77,72 +87,30 @@ Yolov5_TensorRT_Deploy::~Yolov5_TensorRT_Deploy()
 {
     std::cout << "disconstruct" << std::endl;
     // 释放资源
-    cudaFree(buffers[0]);
-    cudaFree(buffers[1]);
-//    m_context->destroy();
-//    m_cudaEngine->destroy();
-//    m_runtime->destroy();
+    m_runingFlag = false;
+    if(buffers[0] != nullptr)
+    {
+        cudaFree(buffers[0]);
+        buffers[0] = nullptr;
+    }
+
+    if(buffers[1] != nullptr)
+    {
+        cudaFree(buffers[1]);
+        buffers[1] = nullptr;
+    }
+
+    if(trtModeStream != nullptr)
+    {
+        delete[] trtModeStream;
+        trtModeStream = nullptr;
+    }
+
 }
 
 void Yolov5_TensorRT_Deploy::get_model_info()
 {
-    int modeSize = Common_API::load_tensorRT_model(&trtModeStream, model_path.c_str());
-    qDebug() << "the size is " << modeSize;
-    m_builder = createInferBuilder(m_loger);
-    m_builder->getLogger()->log(nvinfer1::ILogger::Severity::kINFO, "Yolov5 with tensorRT deploy");
 
-    m_runtime = createInferRuntime(m_loger);
-    m_cudaEngine = m_runtime->deserializeCudaEngine(trtModeStream, modeSize);
-
-    int numIOTensors = m_cudaEngine->getNbIOTensors();
-    qDebug() << "the numIOTensors is " << numIOTensors;
-
-
-    for(int i = 0; i < numIOTensors; i++)
-    {
-        const char* tensorName = m_cudaEngine->getIOTensorName(i);
-        nvinfer1::TensorIOMode ioMode = m_cudaEngine->getTensorIOMode(tensorName);
-        qDebug() << "the name is " << tensorName;
-        qDebug() << "Tensor I/O Mode: " << (ioMode == nvinfer1::TensorIOMode::kINPUT ? "input" : "output");
-
-        nvinfer1::Dims tensorDims = m_cudaEngine->getTensorShape(tensorName);
-        qDebug() << "Tensor Dimensions: ";
-        for(int j = 0; j < tensorDims.nbDims; j++)
-        {
-            qDebug() << tensorDims.d[j] << " ";
-            if(ioMode == nvinfer1::TensorIOMode::kINPUT)
-            {
-                inputSize *= tensorDims.d[j];
-                if(j == 2)
-                {
-                    input_h = tensorDims.d[j];
-                }else if(j == 3)
-                {
-                    input_w = tensorDims.d[j];
-                }
-            }else if(ioMode == nvinfer1::TensorIOMode::kOUTPUT)
-            {
-                outputSize *= tensorDims.d[j];
-                if(j == 1)
-                {
-                    out_num = tensorDims.d[j];
-                }else if(j == 2)
-                {
-                    out_ch = tensorDims.d[j];
-                }
-            }
-        }
-    }
-    qDebug() << "the input size is " << inputSize;
-    qDebug() << "the output size is" << outputSize;
-    prob.resize(outputSize );
-
-    m_context = m_cudaEngine->createExecutionContext();
-
-    inputSize *= sizeof(float);
-    outputSize *= sizeof(float);
-    cudaMalloc(&buffers[0], inputSize);
-    cudaMalloc(&buffers[1], outputSize);
 
 }
 
@@ -254,7 +222,6 @@ void Yolov5_TensorRT_Deploy::post_image_process(std::vector<float> &outputs, cv:
 void Yolov5_TensorRT_Deploy::process()
 {
     labels = Common_API::readClassNames(label_path);
-//    this->get_model_info();
 
     QString path = QString::fromStdString(image_path);
 
@@ -268,6 +235,10 @@ void Yolov5_TensorRT_Deploy::process()
             cv::Mat frame;
             while(true)
             {
+                if(!m_runingFlag)
+                {
+                    return;
+                }
 
                 bool ret = capture.read(frame);
                 if(!ret)
