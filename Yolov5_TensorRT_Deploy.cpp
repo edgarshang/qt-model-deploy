@@ -136,10 +136,8 @@ cv::Mat Yolov5_TensorRT_Deploy::pre_image_process(cv::Mat &image)
 }
 void Yolov5_TensorRT_Deploy::run_model(cv::Mat &input_image)
 {
-
     cudaMemcpy(buffers[0], input_image.ptr<float>(), input_h*input_w*3*sizeof(float), cudaMemcpyHostToDevice);
     m_context->executeV2(buffers);
-//    cudaMemcpy(prob.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost);
 }
 
 void Yolov5_TensorRT_Deploy::post_image_process(std::vector<float> &outputs, cv::Mat &inputimage)
@@ -153,8 +151,7 @@ void Yolov5_TensorRT_Deploy::post_image_process(std::vector<float> &outputs, cv:
     std::vector<cv::Rect> boxes;
     std::vector<int> classIds;
     std::vector<float> confidences;
-    out_num = 25200;
-    out_ch = 85;
+
     cv::Mat det_output(out_num, out_ch, CV_32F, (float*)pdata);
 
     det_output = (model == YOLOV5 ? det_output : det_output.t());

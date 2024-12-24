@@ -16,18 +16,7 @@ resnet18_TensorRT::resnet18_TensorRT(modelConfInfo_ info)
     builder = createInferBuilder(m_loger);
     builder->getLogger()->log(nvinfer1::ILogger::Severity::kERROR, "Create Builder...");
 
-    std::ifstream file(model_path, std::ios::binary);
-    int size = 0;
-    if (file.good())
-    {
-        file.seekg(0, file.end);
-        size = file.tellg();
-        file.seekg(0, file.beg);
-        trtModeStream = new char[size];
-        assert(trtModeStream);
-        file.read(trtModeStream, size);
-        file.close();
-    }
+    int size = Common_API::load_tensorRT_model(&trtModeStream, model_path.c_str());
 
     m_runtime = createInferRuntime(m_loger);
     m_cudaEngine = m_runtime->deserializeCudaEngine(trtModeStream, size);
