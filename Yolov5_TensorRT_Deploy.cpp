@@ -87,7 +87,7 @@ Yolov5_TensorRT_Deploy::~Yolov5_TensorRT_Deploy()
 {
     std::cout << "disconstruct" << std::endl;
     // 释放资源
-    m_runingFlag = false;
+
     if(buffers[0] != nullptr)
     {
         cudaFree(buffers[0]);
@@ -217,6 +217,11 @@ void Yolov5_TensorRT_Deploy::post_image_process(std::vector<float> &outputs, cv:
     // compute the fps
     float t = (cv::getTickCount() - start_time) / static_cast<float>(cv::getTickFrequency());
     cv::putText(inputimage, cv::format("FPS: %.2f", 1.0/t), cv::Point(20,40), cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(255, 0, 0), 2, 8);
+}
+
+void Yolov5_TensorRT_Deploy::modelStop()
+{
+    m_runingFlag = false;
 }
 
 void Yolov5_TensorRT_Deploy::process()

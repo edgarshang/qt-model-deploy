@@ -261,6 +261,11 @@ void ModelHandler::processor(modelTypeInfo_ &info)
 ModelHandler::~ModelHandler()
 {
     qDebug() << "~ModelHandler()";
+    if(modelInference != nullptr)
+    {
+        modelInference->modelStop();
+    }
+    quit();
     wait();
 }
 

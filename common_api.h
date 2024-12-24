@@ -79,6 +79,10 @@ class ModelProcessor
 {
 public:
     virtual void modelRunner() = 0;
+    virtual void modelStop()
+    {
+
+    }
 };
 
 
