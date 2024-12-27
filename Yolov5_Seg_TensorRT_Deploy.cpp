@@ -26,6 +26,9 @@ Yolov5_Seg_TensorRT_Deploy::Yolov5_Seg_TensorRT_Deploy(modelConfInfo_ info)
     int numIOTensors = m_cudaEngine->getNbIOTensors();
     printf("the size is %d\n", numIOTensors);
 
+    sx = 160.0f / 640.0f;
+       sy = 160.0f / 640.0f;
+
     for (int i = 0; i < numIOTensors; i++)
     {
         const char* tensorName = m_cudaEngine->getIOTensorName(i);
@@ -228,58 +231,66 @@ void Yolov5_Seg_TensorRT_Deploy::post_image_process(std::vector<float> &outputs,
         int idx = indexes[i];
         int cid = classIds[idx];
 
-//        cv::Rect box = boxes[idx];
-//        int x1 = std::max(0, box.x);
-//        int y1 = std::max(0, box.y);
-//        int x2 = std::max(0, box.br().x);
-//        int y2 = std::max(0, box.br().y);
-//        cv::Mat m2 = masks[idx];
-//        cv::Mat m = m2 * mask1;
-//        for (int col = 0; col < m.cols; col++) {
-//            m.at<float>(0, col) = Common_API::sigmoid_function(m.at<float>(0, col));
-//        }
-//        cv::Mat m1 = m.reshape(1, 160);
-//        int mx1 = std::max(0, int((x1 * sx) / x_factor));
-//        int mx2 = std::max(0, int((x2 * sx) / x_factor));
-//        int my1 = std::max(0, int((y1 * sy) / y_factor));
-//        int my2 = std::max(0, int((y2 * sy) / y_factor));
+        cv::Rect box = boxes[idx];
+        int x1 = std::max(0, box.x);
+        int y1 = std::max(0, box.y);
+        int x2 = std::max(0, box.br().x);
+        int y2 = std::max(0, box.br().y);
+        cv::Mat m2 = masks[idx];
+        cv::Mat m = m2 * mask1;
+        for (int col = 0; col < m.cols; col++) {
+            m.at<float>(0, col) = Common_API::sigmoid_function(m.at<float>(0, col));
+        }
+        cv::Mat m1 = m.reshape(1, 160);
+        int mx1 = std::max(0, int((x1 * sx) / x_factor));
+        int mx2 = std::max(0, int((x2 * sx) / x_factor));
+        int my1 = std::max(0, int((y1 * sy) / y_factor));
+        int my2 = std::max(0, int((y2 * sy) / y_factor));
 
-//        // fix out of range box boundary on 2022-12-14
-//        if (mx2 >= m1.cols) {
-//            mx2 = m1.cols - 1;
-//        }
-//        if (my2 >= m1.rows) {
-//            my2 = m1.rows - 1;
-//        }
-//        // end fix it!!
+        // fix out of range box boundary on 2022-12-14
+        if (mx2 >= m1.cols) {
+            mx2 = m1.cols - 1;
+        }
+        if (my2 >= m1.rows) {
+            my2 = m1.rows - 1;
+        }
+        // end fix it!!
 
-//        cv::Mat mask_roi = m1(cv::Range(my1, my2), cv::Range(mx1, mx2));
-//        cv::Mat rm, det_mask;
+        qDebug() << "my1 = " << my1;
+        qDebug() << "my2 = " << my2;
+        qDebug() << "mx1 = " << mx1;
+        qDebug() << "mx2 = " << mx2;
+        cv::Mat mask_roi = m1(cv::Range(my1, my2), cv::Range(mx1, mx2));
+        cv::Mat rm, det_mask;
 //        qDebug("the file %s function %s linenum %d\n", __FILE__, __FUNCTION__, __LINE__);
-//        cv::resize(mask_roi, rm, cv::Size(x2 - x1, y2 - y1));
-//        for (int r = 0; r < rm.rows; r++) {
-//            for (int c = 0; c < rm.cols; c++) {
-//                float pv = rm.at<float>(r, c);
-//                if (pv > 0.5) {
-//                    rm.at<float>(r, c) = 1.0;
-//                }
-//                else {
-//                    rm.at<float>(r, c) = 0.0;
-//                }
-//            }
-//        }
-//        rm = rm * rng.uniform(0, 255);
-//        rm.convertTo(det_mask, CV_8UC1);
-//        if ((y1 + det_mask.rows) >= inputimage.rows) {
-//            y2 = inputimage.rows - 1;
-//        }
-//        if ((x1 + det_mask.cols) >= inputimage.cols) {
-//            x2 = inputimage.cols - 1;
-//        }
-//        // std::cout << "x1: " << x1 << " x2:" << x2 << " y1: " << y1 << " y2: " << y2 << std::endl;
-//        cv::Mat mask = cv::Mat::zeros(cv::Size(inputimage.cols, inputimage.rows), CV_8UC1);
-//        det_mask(cv::Range(0, y2 - y1), cv::Range(0, x2 - x1)).copyTo(mask(cv::Range(y1, y2), cv::Range(x1, x2)));
-//        add(rgb_mask, cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255)), rgb_mask, mask);
+        qDebug() << "x2 = " << x2;
+        qDebug() << "x1 = " << x1;
+        qDebug() << "y2 = " << y2;
+        qDebug() << "y1 = " << y1;
+        cv::resize(mask_roi, rm, cv::Size(x2 - x1, y2 - y1));
+        for (int r = 0; r < rm.rows; r++) {
+            for (int c = 0; c < rm.cols; c++) {
+                float pv = rm.at<float>(r, c);
+                if (pv > 0.5) {
+                    rm.at<float>(r, c) = 1.0;
+                }
+                else {
+                    rm.at<float>(r, c) = 0.0;
+                }
+            }
+        }
+        rm = rm * rng.uniform(0, 255);
+        rm.convertTo(det_mask, CV_8UC1);
+        if ((y1 + det_mask.rows) >= inputimage.rows) {
+            y2 = inputimage.rows - 1;
+        }
+        if ((x1 + det_mask.cols) >= inputimage.cols) {
+            x2 = inputimage.cols - 1;
+        }
+        // std::cout << "x1: " << x1 << " x2:" << x2 << " y1: " << y1 << " y2: " << y2 << std::endl;
+        cv::Mat mask = cv::Mat::zeros(cv::Size(inputimage.cols, inputimage.rows), CV_8UC1);
+        det_mask(cv::Range(0, y2 - y1), cv::Range(0, x2 - x1)).copyTo(mask(cv::Range(y1, y2), cv::Range(x1, x2)));
+        add(rgb_mask, cv::Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255)), rgb_mask, mask);
 
         cv::rectangle(inputimage, boxes[idx], cv::Scalar(0,0,255), 2, 8,0);
         cv::putText(inputimage, cv::format("%s_%.2f", labels[cid].c_str(), confidences[idx]) , boxes[idx].tl(),
@@ -290,9 +301,9 @@ void Yolov5_Seg_TensorRT_Deploy::post_image_process(std::vector<float> &outputs,
     float t = (cv::getTickCount() - start_time) / static_cast<float>(cv::getTickFrequency());
     cv::putText(inputimage, cv::format("FPS: %.2f", 1.0/t), cv::Point(20,40), cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(255, 0, 0), 2, 8);
 
-//    cv::Mat result;
-//   cv::addWeighted(inputimage, 0.5, rgb_mask, 0.5, 0, result);
-//   result.copyTo(inputimage);
+    cv::Mat result;
+   cv::addWeighted(inputimage, 0.5, rgb_mask, 0.5, 0, result);
+   result.copyTo(inputimage);
 }
 
 void Yolov5_Seg_TensorRT_Deploy::modelStop()
@@ -343,7 +354,7 @@ void Yolov5_Seg_TensorRT_Deploy::process()
         cv::Mat image = cv::imread(path.toStdString());
         cv::Mat model_input = this->pre_image_process(image);
         this->run_model(model_input);
-//        this->post_image_process(prob, image);  // TODO-A
+        this->post_image_process(prob, image);
         image_show->imageshow(image);
     }
 
