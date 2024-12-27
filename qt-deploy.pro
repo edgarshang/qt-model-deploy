@@ -24,6 +24,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    Yolov5_Seg_TensorRT_Deploy.cpp \
     Yolov5_TensorRT_Deploy.cpp \
         main.cpp \
     resnet18_TensorRT.cpp \
@@ -52,6 +53,7 @@ SOURCES += \
     Resnet18_Openvino_Deploy.cpp
 
 HEADERS += \
+    Yolov5_Seg_TensorRT_Deploy.h \
     Yolov5_TensorRT_Deploy.h \
     resnet18_TensorRT.h \
     uideploy.h \

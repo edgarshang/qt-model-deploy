@@ -243,7 +243,6 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if( info.modelType == YOLOV5 || info.modelType == YOLOV8)
         {
-            qDebug() << "contruct";
             modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.engine":"D:/project/ort-deploy/yolov8n.engine");
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
@@ -253,6 +252,18 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             yolov5_tensorRT_deploy = std::make_shared<Yolov5_TensorRT_Deploy>(modelInfo);
             yolov5_tensorRT_deploy->set_Show_image(display);
             modelInference = yolov5_tensorRT_deploy;
+            this->start();
+        }else if( info.modelType == YOLOV5_SEG || info.modelType == YOLOV8_SEG )
+        {
+            modelInfo.modelPath = (info.modelType == YOLOV5_SEG ? "D:/project/ort-deploy/yolov5s-seg.engine":"D:/project/ort-deploy/yolov8n-seg.engine");
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+            yolov5_seg_tensorRT_deploy = std::make_shared<Yolov5_Seg_TensorRT_Deploy>(modelInfo);
+            yolov5_seg_tensorRT_deploy->set_Show_image(display);
+            modelInference = yolov5_seg_tensorRT_deploy;
             this->start();
         }
     }
