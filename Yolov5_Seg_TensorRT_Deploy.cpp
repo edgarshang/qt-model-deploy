@@ -155,7 +155,7 @@ void Yolov5_Seg_TensorRT_Deploy::run_model(cv::Mat &input_image)
     m_context->executeV2(buffers);
 }
 
-void Yolov5_Seg_TensorRT_Deploy::post_image_process(std::vector<float> &outputs, cv::Mat &inputimage)
+void Yolov5_Seg_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
 {
 //    qDebug() << "the outputSize = " << outputSize;
     std::vector<float> output(outputSize0);
@@ -256,17 +256,9 @@ void Yolov5_Seg_TensorRT_Deploy::post_image_process(std::vector<float> &outputs,
         }
         // end fix it!!
 
-        qDebug() << "my1 = " << my1;
-        qDebug() << "my2 = " << my2;
-        qDebug() << "mx1 = " << mx1;
-        qDebug() << "mx2 = " << mx2;
         cv::Mat mask_roi = m1(cv::Range(my1, my2), cv::Range(mx1, mx2));
         cv::Mat rm, det_mask;
-//        qDebug("the file %s function %s linenum %d\n", __FILE__, __FUNCTION__, __LINE__);
-        qDebug() << "x2 = " << x2;
-        qDebug() << "x1 = " << x1;
-        qDebug() << "y2 = " << y2;
-        qDebug() << "y1 = " << y1;
+
         cv::resize(mask_roi, rm, cv::Size(x2 - x1, y2 - y1));
         for (int r = 0; r < rm.rows; r++) {
             for (int c = 0; c < rm.cols; c++) {
@@ -316,7 +308,7 @@ void Yolov5_Seg_TensorRT_Deploy::process()
     labels = Common_API::readClassNames(label_path);
 
     QString path = QString::fromStdString(image_path);
-    std::vector<float> prob;
+
     if(path.endsWith(".mp4") || path.endsWith(".avi"))
     {
         cv::VideoCapture capture(path.toStdString());
@@ -340,7 +332,7 @@ void Yolov5_Seg_TensorRT_Deploy::process()
                 cv::Mat model_input = this->pre_image_process(frame);
                 this->run_model(model_input);
 
-                this->post_image_process(prob, frame);
+                this->post_image_process(frame);
                 image_show->imageshow(frame);
                 if (cv::waitKey(delay) == 27) { // 按下 ESC 键退出
                     break;
@@ -354,7 +346,7 @@ void Yolov5_Seg_TensorRT_Deploy::process()
         cv::Mat image = cv::imread(path.toStdString());
         cv::Mat model_input = this->pre_image_process(image);
         this->run_model(model_input);
-        this->post_image_process(prob, image);
+        this->post_image_process(image);
         image_show->imageshow(image);
     }
 

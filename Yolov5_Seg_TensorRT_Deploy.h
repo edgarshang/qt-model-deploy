@@ -19,8 +19,7 @@ public:
     void get_model_info();
     cv::Mat pre_image_process(cv::Mat &image);
     void run_model(cv::Mat &input_image);
-//    void post_image_process(std::vector<Ort::Value> &outputs, cv::Mat &inputimage);
-    void post_image_process(std::vector<float> &outputs, cv::Mat &inputimage);
+    void post_image_process(cv::Mat &inputimage);
     void process();
     // show
     void set_Show_image(Show *imageShower);
