@@ -12,8 +12,10 @@
 
 #define YOLOV5  "YOLOv5"
 #define YOLOV8  "YOLOv8"
+#define YOLOV11 "YOLOv11"
 #define YOLOV5_SEG "YOLOv5_Seg"
 #define YOLOV8_SEG "YOLOv8_Seg"
+#define YOLOV11_SEG "YOLOv11_Seg"
 
 using namespace nvinfer1;
 using namespace nvonnxparser;

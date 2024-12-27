@@ -241,9 +241,9 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             resnet18_tensorRT_deploy->set_Show_image(display);
             modelInference = resnet18_tensorRT_deploy;
             this->start();
-        }else if( info.modelType == YOLOV5 || info.modelType == YOLOV8)
+        }else if( info.modelType == YOLOV5 || info.modelType == YOLOV8 || info.modelType == YOLOV11)
         {
-            modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.engine":"D:/project/ort-deploy/yolov8n.engine");
+            modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.engine" : (info.modelType == YOLOV8 ? "D:/project/ort-deploy/yolov8n.engine" : "D:/project/ort-deploy/yolov11n.engine"));
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
             modelInfo.modelType = info.modelType.toStdString();
@@ -253,9 +253,9 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             yolov5_tensorRT_deploy->set_Show_image(display);
             modelInference = yolov5_tensorRT_deploy;
             this->start();
-        }else if( info.modelType == YOLOV5_SEG || info.modelType == YOLOV8_SEG )
+        }else if( info.modelType == YOLOV5_SEG || info.modelType == YOLOV8_SEG || info.modelType == YOLOV11_SEG)
         {
-            modelInfo.modelPath = (info.modelType == YOLOV5_SEG ? "D:/project/ort-deploy/yolov5s-seg.engine":"D:/project/ort-deploy/yolov8n-seg.engine");
+            modelInfo.modelPath = (info.modelType == YOLOV5_SEG ? "D:/project/ort-deploy/yolov5s-seg.engine":  (info.modelType == YOLOV8_SEG ? "D:/project/ort-deploy/yolov8n-seg.engine" : "D:/project/ort-deploy/yolov11n-seg.engine"));
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
             modelInfo.modelType = info.modelType.toStdString();
