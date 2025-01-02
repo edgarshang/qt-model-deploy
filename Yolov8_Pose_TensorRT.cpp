@@ -148,13 +148,11 @@ void Yolov8_Pose_TensorRT_Deploy::run_model(cv::Mat &input_image)
 }
 
 
-void Yolov8_Pose_TensorRT_Deploy::post_image_process(std::vector<float> &outputs, cv::Mat &inputimage)
+void Yolov8_Pose_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
 {
-//    qDebug() << "the outputSize = " << outputSize;
-    std::vector<float> output(outputSize);
-    cudaMemcpy(output.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpy(prob.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost);
 
-    float *pdata = output.data();
+    float *pdata = prob.data();
 
     // 后处理 1x25200x85 85-box conf 80- min/max
     std::vector<cv::Rect> boxes;
@@ -236,6 +234,7 @@ void Yolov8_Pose_TensorRT_Deploy::process()
 
     QString path = QString::fromStdString(image_path);
 
+
     if(path.endsWith(".mp4") || path.endsWith(".avi"))
     {
         cv::VideoCapture capture(path.toStdString());
@@ -258,7 +257,7 @@ void Yolov8_Pose_TensorRT_Deploy::process()
                 }
                 cv::Mat model_input = this->pre_image_process(frame);
                 this->run_model(model_input);
-                this->post_image_process(prob, frame);
+                this->post_image_process(frame);
                 image_show->imageshow(frame);
                 if (cv::waitKey(delay) == 27) { // 按下 ESC 键退出
                     break;
@@ -272,7 +271,7 @@ void Yolov8_Pose_TensorRT_Deploy::process()
         cv::Mat image = cv::imread(path.toStdString());
         cv::Mat model_input = this->pre_image_process(image);
         this->run_model(model_input);
-        this->post_image_process(prob, image);  // TODO-A
+        this->post_image_process(image);  // TODO-A
         image_show->imageshow(image);
     }
 

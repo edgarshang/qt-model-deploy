@@ -20,7 +20,7 @@ public:
     cv::Mat pre_image_process(cv::Mat &image);
     void run_model(cv::Mat &input_image);
 //    void post_image_process(std::vector<Ort::Value> &outputs, cv::Mat &inputimage);
-    void post_image_process(std::vector<float> &outputs, cv::Mat &inputimage);
+    void post_image_process(cv::Mat &inputimage);
     void process();
     // show
     void set_Show_image(Show *imageShower);
@@ -63,6 +63,7 @@ private:
 
     void* buffers[2] = {nullptr, nullptr};
     std::vector<float> prob;
+//    std::vector<float> output;
 
     IBuilder *m_builder =  nullptr;
     IRuntime *m_runtime = nullptr;
