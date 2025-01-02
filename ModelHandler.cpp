@@ -265,6 +265,21 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             yolov5_seg_tensorRT_deploy->set_Show_image(display);
             modelInference = yolov5_seg_tensorRT_deploy;
             this->start();
+        }else if( "YOLOv8_Pose" == info.modelType )
+        {
+            modelInfo.modelPath = "D:/project/ort-deploy/yolov8-pose.engine";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            qDebug() << "yolov8 tensorRT deploy";
+            Yolov8_Pose_tensorRT_deploy = std::make_shared<Yolov8_Pose_TensorRT_Deploy>(modelInfo);
+            Yolov8_Pose_tensorRT_deploy->set_Show_image(display);
+            modelInference = Yolov8_Pose_tensorRT_deploy;
+            this->start();
+
         }
     }
 }
