@@ -143,10 +143,10 @@ void Yolov5_TensorRT_Deploy::run_model(cv::Mat &input_image)
 void Yolov5_TensorRT_Deploy::post_image_process(std::vector<float> &outputs, cv::Mat &inputimage)
 {
 //    qDebug() << "the outputSize = " << outputSize;
-    std::vector<float> output(outputSize);
-    cudaMemcpy(output.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost);
+//    std::vector<float> output(outputSize);
+    cudaMemcpy(prob.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost);
 
-    float *pdata = output.data();
+    float *pdata = prob.data();
     // 后处理 1x25200x85 85-box conf 80- min/max
     std::vector<cv::Rect> boxes;
     std::vector<int> classIds;
