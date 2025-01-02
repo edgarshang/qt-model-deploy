@@ -140,7 +140,7 @@ void Yolov5_TensorRT_Deploy::run_model(cv::Mat &input_image)
     m_context->executeV2(buffers);
 }
 
-void Yolov5_TensorRT_Deploy::post_image_process(std::vector<float> &outputs, cv::Mat &inputimage)
+void Yolov5_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
 {
 //    qDebug() << "the outputSize = " << outputSize;
 //    std::vector<float> output(outputSize);
@@ -249,7 +249,7 @@ void Yolov5_TensorRT_Deploy::process()
                 }
                 cv::Mat model_input = this->pre_image_process(frame);
                 this->run_model(model_input);
-                this->post_image_process(prob, frame);
+                this->post_image_process(frame);
                 image_show->imageshow(frame);
                 if (cv::waitKey(delay) == 27) { // 按下 ESC 键退出
                     break;
@@ -263,7 +263,7 @@ void Yolov5_TensorRT_Deploy::process()
         cv::Mat image = cv::imread(path.toStdString());
         cv::Mat model_input = this->pre_image_process(image);
         this->run_model(model_input);
-        this->post_image_process(prob, image);  // TODO-A
+        this->post_image_process(image);  // TODO-A
         image_show->imageshow(image);
     }
 
