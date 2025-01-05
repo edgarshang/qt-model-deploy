@@ -74,12 +74,15 @@ Yolov5_TensorRT_Deploy::Yolov5_TensorRT_Deploy(modelConfInfo_ info)
     // 创建执行上下文
     m_context = m_cudaEngine->createExecutionContext();
 
-    input_h = 640;
-    input_w = 640;
     outputSize = 85*25200;
     prob.resize(outputSize);
     cudaMalloc(&buffers[0], input_h* input_w * 3 * sizeof(float));
     cudaMalloc(&buffers[1], outputSize * sizeof(float));
+
+    m_context->setTensorAddress("images", buffers[0]);
+    m_context->setTensorAddress("output0", buffers[1]);
+
+    cudaStreamCreate(&stream);
 
 }
 
@@ -105,6 +108,10 @@ Yolov5_TensorRT_Deploy::~Yolov5_TensorRT_Deploy()
         delete[] trtModeStream;
         trtModeStream = nullptr;
     }
+
+    cudaStreamDestroy(stream);
+
+
 
 }
 
@@ -136,16 +143,16 @@ cv::Mat Yolov5_TensorRT_Deploy::pre_image_process(cv::Mat &image)
 }
 void Yolov5_TensorRT_Deploy::run_model(cv::Mat &input_image)
 {
-    cudaMemcpy(buffers[0], input_image.ptr<float>(), input_h*input_w*3*sizeof(float), cudaMemcpyHostToDevice);
-    m_context->executeV2(buffers);
+    start_time = cv::getTickCount();
+    cudaMemcpyAsync(buffers[0], input_image.ptr<float>(), input_h*input_w*3*sizeof(float), cudaMemcpyHostToDevice, stream);
+    m_context->enqueueV3(stream);
 }
 
 void Yolov5_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
 {
-//    qDebug() << "the outputSize = " << outputSize;
-//    std::vector<float> output(outputSize);
-    cudaMemcpy(prob.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost);
-
+    cudaMemcpyAsync(prob.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost, stream);
+    cudaStreamSynchronize(stream);
+    end_time = cv::getTickCount();
     float *pdata = prob.data();
     // 后处理 1x25200x85 85-box conf 80- min/max
     std::vector<cv::Rect> boxes;
@@ -212,7 +219,7 @@ void Yolov5_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
     }
 
     // compute the fps
-    float t = (cv::getTickCount() - start_time) / static_cast<float>(cv::getTickFrequency());
+    float t = (end_time - start_time) / static_cast<float>(cv::getTickFrequency());
     cv::putText(inputimage, cv::format("FPS: %.2f", 1.0/t), cv::Point(20,40), cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(255, 0, 0), 2, 8);
 }
 

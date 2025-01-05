@@ -56,6 +56,9 @@ private:
     float y_factor;
 
     int64 start_time;
+    int64 end_time;
+
+    cudaStream_t stream;
 
     Logger m_loger;
 
