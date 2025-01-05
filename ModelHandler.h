@@ -30,6 +30,7 @@
 #include "Yolov5_TensorRT_Deploy.h"
 #include "Yolov5_Seg_TensorRT_Deploy.h"
 #include "Yolov8_Pose_TensorRT.h"
+#include "Yolov6_Face_TensorRT.h"
 
 
 class ModelHandler : public QThread,  public ImageProcessor
@@ -66,6 +67,7 @@ public:
     std::shared_ptr<Yolov5_TensorRT_Deploy> yolov5_tensorRT_deploy;
     std::shared_ptr<Yolov5_Seg_TensorRT_Deploy> yolov5_seg_tensorRT_deploy;
     std::shared_ptr<Yolov8_Pose_TensorRT_Deploy> Yolov8_Pose_tensorRT_deploy;
+    std::shared_ptr<Yolov6_Face_TensorRT_Deploy> Yolov6_face_tensorRT_deploy;
 
     modelConfInfo_ modelInfo;
 

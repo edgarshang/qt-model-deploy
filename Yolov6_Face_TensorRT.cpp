@@ -1,5 +1,6 @@
-//#include "Yolov5_Onnx_Deploy.h"
-#include "Yolov5_TensorRT_Deploy.h"
+#include "Yolov6_Face_TensorRT.h"
+
+
 #include <QDebug>
 
 using namespace nvinfer1;
@@ -8,7 +9,7 @@ using namespace cv;
 
 
 
-Yolov5_TensorRT_Deploy::Yolov5_TensorRT_Deploy(modelConfInfo_ info)
+Yolov6_Face_TensorRT_Deploy::Yolov6_Face_TensorRT_Deploy(modelConfInfo_ info)
 {
 
     printf("hello, wrold\n");
@@ -74,19 +75,19 @@ Yolov5_TensorRT_Deploy::Yolov5_TensorRT_Deploy(modelConfInfo_ info)
     // 创建执行上下文
     m_context = m_cudaEngine->createExecutionContext();
 
-    outputSize = 85*25200;
+    outputSize = out_num * out_ch;
     prob.resize(outputSize);
     cudaMalloc(&buffers[0], input_h* input_w * 3 * sizeof(float));
     cudaMalloc(&buffers[1], outputSize * sizeof(float));
 
     m_context->setTensorAddress("images", buffers[0]);
-    m_context->setTensorAddress("output0", buffers[1]);
+    m_context->setTensorAddress("outputs", buffers[1]);
 
     cudaStreamCreate(&stream);
 
 }
 
-Yolov5_TensorRT_Deploy::~Yolov5_TensorRT_Deploy()
+Yolov6_Face_TensorRT_Deploy::~Yolov6_Face_TensorRT_Deploy()
 {
     std::cout << "disconstruct" << std::endl;
     // 释放资源
@@ -111,18 +112,16 @@ Yolov5_TensorRT_Deploy::~Yolov5_TensorRT_Deploy()
 
     cudaStreamDestroy(stream);
 
-
-
 }
 
-void Yolov5_TensorRT_Deploy::get_model_info()
+void Yolov6_Face_TensorRT_Deploy::get_model_info()
 {
 
 
 }
 
 
-cv::Mat Yolov5_TensorRT_Deploy::pre_image_process(cv::Mat &image)
+cv::Mat Yolov6_Face_TensorRT_Deploy::pre_image_process(cv::Mat &image)
 {
     start_time = cv::getTickCount();
     int w = image.cols;
@@ -133,77 +132,75 @@ cv::Mat Yolov5_TensorRT_Deploy::pre_image_process(cv::Mat &image)
     cv::Mat image_m = cv::Mat::zeros(cv::Size(_max, _max), CV_8UC3);
     cv::Rect roi(0,0,w,h);
     image.copyTo(image_m(roi));
-    x_factor = image_m.cols / static_cast<float>(input_h);
-    y_factor = image_m.rows / static_cast<float>(input_w);
+    x_factor = image_m.cols / static_cast<float>(640);
+    y_factor = image_m.rows / static_cast<float>(640);
+
+    m1_factor = cv::Mat::zeros(cv::Size(2, 5), CV_32FC1);
+    for(int i = 0; i< 5; i++)
+    {
+        m1_factor.at<float>(i,0) = x_factor;
+        m1_factor.at<float>(i,1) = y_factor;
+    }
 
     cv::Mat blob = cv::dnn::blobFromImage(image_m, 1.0/255.0, cv::Size(input_w, input_h),
                                           cv::Scalar(0,0,0), true, true);
 
     return blob;
 }
-void Yolov5_TensorRT_Deploy::run_model(cv::Mat &input_image)
+void Yolov6_Face_TensorRT_Deploy::run_model(cv::Mat &input_image)
 {
-    start_time = cv::getTickCount();
+//    cudaMemcpy(buffers[0], input_image.ptr<float>(), input_h*input_w*3*sizeof(float), cudaMemcpyHostToDevice);
+//    m_context->executeV2(buffers);
+
     cudaMemcpyAsync(buffers[0], input_image.ptr<float>(), input_h*input_w*3*sizeof(float), cudaMemcpyHostToDevice, stream);
     m_context->enqueueV3(stream);
 }
 
-void Yolov5_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
-{
-    cudaMemcpyAsync(prob.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost, stream);
-//    cudaStreamSynchronize(stream);
-    end_time = cv::getTickCount();
-    float *pdata = prob.data();
-    // 后处理 1x25200x85 85-box conf 80- min/max
-    std::vector<cv::Rect> boxes;
-    std::vector<int> classIds;
-    std::vector<float> confidences;
 
+void Yolov6_Face_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
+{
+//    cudaMemcpy(prob.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost);
+    cudaMemcpyAsync(prob.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost, stream);
+    float *pdata = prob.data();
+
+    // 后处理 1x8400x16 16 = box(4) + landmark(10) + sorces(1) + confinence(1)
+    std::vector<cv::Rect> boxes;
+    std::vector<float> confidences;
+    std::vector<cv::Mat> keypoints;
     cv::Mat det_output(out_num, out_ch, CV_32F, (float*)pdata);
 
-    det_output = (model == YOLOV5 ? det_output : det_output.t());
-//    qDebug() << "det_output.rows == " << det_output.rows;
-
+    // 16 = xyxy(4) + landmark(10) + socres(1) + conf(1)
     for(int i = 0; i < det_output.rows; i++)
     {
-        if (model == YOLOV5)
+
+        float conf = det_output.at<float>(i,15);
+//        qDebug() << "conf = " << conf;
+        if(conf < 0.7)
         {
-            float conf = det_output.at<float>(i,4);
-            if(conf < 0.45)
-            {
-                continue;
-            }
+            continue;
         }
 
 
-        cv::Mat classes_scores = det_output.row(i).colRange((model == YOLOV5 ? 5 : 4), (model == YOLOV5 ? out_ch : out_num));
-        cv::Point classIdPoint;
-        double score;
-        cv::minMaxLoc(classes_scores, 0, &score, 0, &classIdPoint);
+        float cx = det_output.at<float>(i,0);
+        float cy = det_output.at<float>(i,1);
+        float ow = det_output.at<float>(i,2);
+        float oh = det_output.at<float>(i,3);
 
-        // 置信度0-1之间
-        if( score > 0.25)
-        {
-            float cx = det_output.at<float>(i,0);
-            float cy = det_output.at<float>(i,1);
-            float ow = det_output.at<float>(i,2);
-            float oh = det_output.at<float>(i,3);
+        int x = static_cast<int>((cx - 0.5*ow) * x_factor);
+        int y = static_cast<int>((cy - 0.5*oh) * y_factor);
+        int width = static_cast<int>(ow*x_factor);
+        int height = static_cast<int>(oh*y_factor);
 
-            int x = static_cast<int>((cx - 0.5*ow) * x_factor);
-            int y = static_cast<int>((cy - 0.5*oh) * y_factor);
-            int width = static_cast<int>(ow*x_factor);
-            int height = static_cast<int>(oh*y_factor);
+        cv::Rect box;
+        box.x = x;
+        box.y = y;
+        box.width = width;
+        box.height = height;
 
-            cv::Rect box;
-            box.x = x;
-            box.y = y;
-            box.width = width;
-            box.height = height;
-
-            boxes.push_back(box);
-            classIds.push_back(classIdPoint.x);
-            confidences.push_back(score);
-        }
+        boxes.push_back(box);
+        confidences.push_back(conf);
+        cv::Mat pts = det_output.row(i).colRange(4, 14);
+        keypoints.push_back(pts);
     }
 
     // NMS
@@ -212,27 +209,41 @@ void Yolov5_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
     for(size_t i = 0; i < indexes.size(); i++)
     {
         int idx = indexes[i];
-        int cid = classIds[idx];
         cv::rectangle(inputimage, boxes[idx], cv::Scalar(0,0,255), 2, 8,0);
-        cv::putText(inputimage, cv::format("%s_%.2f", labels[cid].c_str(), confidences[idx]) , boxes[idx].tl(),
+        cv::putText(inputimage, cv::format("face %.2f", confidences[idx]) , boxes[idx].tl(),
                     cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(0,255,0), 2, 8);
+        cv::Mat keyPoint = keypoints[i];
+        keyPoint = keyPoint.reshape(0,5);
+        cv::Mat kp;
+
+        cv::multiply(keyPoint, m1_factor, kp);
+        kp = kp.reshape(0,10);
+
+        const float* kpts_data = &kp.at<float>(0,0);
+//        Common_API::draw_pose_keyPoint(kpts_data, inputimage);
+        // render all key point circles
+        for (int c = 0; c < 5; c++) {
+            cv::circle(inputimage, cv::Point(kpts_data[c * 2], kpts_data[c * 2 + 1]), 4, cv::Scalar(0, 255, 0), 3, 8, 0);
+        }
     }
 
     // compute the fps
-    float t = (end_time - start_time) / static_cast<float>(cv::getTickFrequency());
+    float t = (cv::getTickCount() - start_time) / static_cast<float>(cv::getTickFrequency());
     cv::putText(inputimage, cv::format("FPS: %.2f", 1.0/t), cv::Point(20,40), cv::FONT_HERSHEY_PLAIN, 2.0, cv::Scalar(255, 0, 0), 2, 8);
+
 }
 
-void Yolov5_TensorRT_Deploy::modelStop()
+void Yolov6_Face_TensorRT_Deploy::modelStop()
 {
     m_runingFlag = false;
 }
 
-void Yolov5_TensorRT_Deploy::process()
+void Yolov6_Face_TensorRT_Deploy::process()
 {
     labels = Common_API::readClassNames(label_path);
 
     QString path = QString::fromStdString(image_path);
+
 
     if(path.endsWith(".mp4") || path.endsWith(".avi"))
     {
@@ -276,12 +287,13 @@ void Yolov5_TensorRT_Deploy::process()
 
 }
 // show
-void Yolov5_TensorRT_Deploy::set_Show_image(Show *imageShower)
+void Yolov6_Face_TensorRT_Deploy::set_Show_image(Show *imageShower)
 {
     image_show = imageShower;
 }
 
-void Yolov5_TensorRT_Deploy::modelRunner()
+void Yolov6_Face_TensorRT_Deploy::modelRunner()
 {
     this->process();
 }
+

@@ -26,6 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     Yolov5_Seg_TensorRT_Deploy.cpp \
     Yolov5_TensorRT_Deploy.cpp \
+    Yolov6_Face_TensorRT.cpp \
     Yolov8_Pose_TensorRT.cpp \
         main.cpp \
     resnet18_TensorRT.cpp \
@@ -56,6 +57,7 @@ SOURCES += \
 HEADERS += \
     Yolov5_Seg_TensorRT_Deploy.h \
     Yolov5_TensorRT_Deploy.h \
+    Yolov6_Face_TensorRT.h \
     Yolov8_Pose_TensorRT.h \
     resnet18_TensorRT.h \
     uideploy.h \

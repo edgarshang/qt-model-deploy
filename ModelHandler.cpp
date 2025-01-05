@@ -280,6 +280,20 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             modelInference = Yolov8_Pose_tensorRT_deploy;
             this->start();
 
+        }else if("Yolov6_FaceLandMark" == info.modelType )
+        {
+
+            modelInfo.modelPath = "D:/project/ort-deploy/yolov6_face_fp16.engine";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            Yolov6_face_tensorRT_deploy = std::make_shared<Yolov6_Face_TensorRT_Deploy>(modelInfo);
+            Yolov6_face_tensorRT_deploy->set_Show_image(display);
+            modelInference = Yolov6_face_tensorRT_deploy;
+            this->start();
         }
     }
 }
