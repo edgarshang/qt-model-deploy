@@ -294,6 +294,19 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             Yolov6_face_tensorRT_deploy->set_Show_image(display);
             modelInference = Yolov6_face_tensorRT_deploy;
             this->start();
+        }else if(info.modelType == "Unet")
+        {
+            modelInfo.modelPath = "D:/project/ort-deploy/unet_road_fp16.engine";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            unet_road_rensorRT_deploy = std::make_shared<Unet_Road_TensorRT_Deploy>(modelInfo);
+            unet_road_rensorRT_deploy->set_Show_image(display);
+            modelInference = unet_road_rensorRT_deploy;
+            this->start();
         }
     }
 }
