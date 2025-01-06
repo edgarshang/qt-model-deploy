@@ -307,6 +307,32 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             unet_road_rensorRT_deploy->set_Show_image(display);
             modelInference = unet_road_rensorRT_deploy;
             this->start();
+        }else if("DeepLabV3" == info.modelType)
+        {
+            modelInfo.modelPath = "D:/project/ort-deploy/test-code.engine";
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            deeplabv3_rensorRT_deploy = std::make_shared<DEEPLABV3_TensorRT_Deploy>(modelInfo);
+            deeplabv3_rensorRT_deploy->set_Show_image(display);
+            modelInference = deeplabv3_rensorRT_deploy;
+            this->start();
+        }else if("OnnxToTrt" == info.modelType) // onnx model convert to engine model
+        {
+            modelInfo.modelPath = info.filePath.toStdString();
+            modelInfo.imagePath = info.filePath.toStdString();
+            modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
+            modelInfo.modelType = info.modelType.toStdString();
+            modelInfo.scoresThreshold = info.scores;
+            modelInfo.confienceThreshold = info.conf;
+
+            onnx_to_trt_doer = std::make_shared<ONNX_TO_TENSORRT>(modelInfo);
+            onnx_to_trt_doer->set_Show_image(display);
+            modelInference = onnx_to_trt_doer;
+            this->start();
         }
     }
 }

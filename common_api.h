@@ -24,7 +24,7 @@ class Logger : public ILogger
 {
     void  log(Severity severity, const char* msg) noexcept
     {
-        if (severity != Severity::kINFO)
+        if (severity <= Severity::kINFO)
         {
             std::cout << msg << std::endl;
         }

@@ -9,7 +9,7 @@
 
 const char *modetye[] = {"resnet18", "YOLOv5", "YOLOv8", "RetinaNet", "FasterRcnn", "YOLOv5_Seg",
                          "YOLOv8_Seg", "MaskRcnn", "DeepLabV3", "Unet", "keyPointRcnn", "YOLOv8_Pose",
-                        "Yolov6_FaceLandMark", "YOLOv11", "YOLOv11_Seg"};
+                        "Yolov6_FaceLandMark", "YOLOv11", "YOLOv11_Seg", "OnnxToTrt"};
 
 Deploy::Deploy(QWidget *parent)
     : QWidget(parent)
@@ -129,7 +129,7 @@ void Deploy::onPushButtonClick()
     {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                                   "/home",
-                                                                  tr("Images (*.png *.jpg *.png *.mp4)"));
+                                                                  tr("Images (*.png *.jpg *.png *.mp4 *.onnx)"));
 //        qDebug() << fileName;
         if(!fileName.isEmpty())
         {

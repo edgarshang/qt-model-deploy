@@ -32,6 +32,8 @@
 #include "Yolov8_Pose_TensorRT.h"
 #include "Yolov6_Face_TensorRT.h"
 #include "Unet_Road_TensorRT.h"
+#include "DeepLabV3_TensorRT.h"
+#include "onnxToTrt.h"
 
 
 class ModelHandler : public QThread,  public ImageProcessor
@@ -70,6 +72,8 @@ public:
     std::shared_ptr<Yolov8_Pose_TensorRT_Deploy> Yolov8_Pose_tensorRT_deploy;
     std::shared_ptr<Yolov6_Face_TensorRT_Deploy> Yolov6_face_tensorRT_deploy;
     std::shared_ptr<Unet_Road_TensorRT_Deploy> unet_road_rensorRT_deploy;
+    std::shared_ptr<DEEPLABV3_TensorRT_Deploy> deeplabv3_rensorRT_deploy;
+    std::shared_ptr<ONNX_TO_TENSORRT> onnx_to_trt_doer;
 
 
     modelConfInfo_ modelInfo;
