@@ -13,6 +13,8 @@ using namespace ov;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    int ret;
     Deploy w;
 
     ModelHandler modelHandle(&w);
@@ -20,5 +22,6 @@ int main(int argc, char *argv[])
 
     w.show();
 
-    return a.exec();
+    ret = a.exec();
+    return ret;
 }

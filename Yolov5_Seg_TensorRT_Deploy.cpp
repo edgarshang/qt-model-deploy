@@ -246,6 +246,10 @@ void Yolov5_Seg_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
         int mx2 = std::max(0, int((x2 * sx) / x_factor));
         int my1 = std::max(0, int((y1 * sy) / y_factor));
         int my2 = std::max(0, int((y2 * sy) / y_factor));
+        std::cout << "sx is " << sx << " sy is " << sy << std::endl;
+                std::cout << "mx1 is " << mx1 << " mx2 is " << mx2 << " my1 is " << my1 << " my2 is " << my2 << std::endl;
+                std::cout << "x1 is " << x1 << " x2 is " << x2 << " y1 is " << y1 << " y2 is " << y2 << std::endl;
+                std::cout << "x_factor is " << x_factor << " y_factor is " << y_factor << std::endl;
 
         // fix out of range box boundary on 2022-12-14
         if (mx2 >= m1.cols) {

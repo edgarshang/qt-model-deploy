@@ -33,14 +33,14 @@ ONNX_TO_TENSORRT::ONNX_TO_TENSORRT(modelConfInfo_ info)
     }
 
     // 需要更改shape的时候，需要调用以下两句
-    ITensor * inputTensor = m_network->getInput(0);
-    inputTensor->setDimensions(Dims4{1,3,320,320});
+//    ITensor * inputTensor = m_network->getInput(0);
+//    inputTensor->setDimensions(Dims4{1,3,320,320});
 
     m_cudaEngine = m_builder->buildEngineWithConfig(*m_network, *m_buildConfig);
 
     IHostMemory* serializeModel = m_cudaEngine->serialize();
 
-    std::ofstream engineFileOut("D:/project/ort-deploy/test-code.engine", std::ios::binary);
+    std::ofstream engineFileOut("D:/project/ort-deploy/test-code-yolov5.engine", std::ios::binary);
 
     engineFileOut.write(static_cast<const char*>(serializeModel->data()), serializeModel->size());
 

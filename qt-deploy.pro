@@ -26,6 +26,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     DeepLabV3_TensorRT.cpp \
     MaskRcnn_Seg_TensorRT.cpp \
+    TensorRTInferMange.cpp \
     Unet_Road_TensorRT.cpp \
     Yolov5_Seg_TensorRT_Deploy.cpp \
     Yolov5_TensorRT_Deploy.cpp \
@@ -61,6 +62,7 @@ SOURCES += \
 HEADERS += \
     DeepLabV3_TensorRT.h \
     MaskRcnn_Seg_TensorRT.h \
+    TensorRTInferMange.h \
     Unet_Road_TensorRT.h \
     Yolov5_Seg_TensorRT_Deploy.h \
     Yolov5_TensorRT_Deploy.h \

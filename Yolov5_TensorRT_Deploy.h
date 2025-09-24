@@ -63,7 +63,10 @@ private:
     Logger m_loger;
 
     void* buffers[2] = {nullptr, nullptr};
-    std::vector<float> prob;
+//    std::vector<float> prob;
+    float *inputHost = nullptr;
+
+    float *prob = nullptr;
 
     IBuilder *m_builder =  nullptr;
     IRuntime *m_runtime = nullptr;

@@ -35,11 +35,14 @@
 #include "DeepLabV3_TensorRT.h"
 #include "onnxToTrt.h"
 
+#include "uideploy.h"
+
 
 class ModelHandler : public QThread,  public ImageProcessor
 {
+    Q_OBJECT
 public:
-    ModelHandler(Show *imageDisplay);
+    ModelHandler(Deploy *imageDisplay);
     ~ModelHandler();
     virtual void processor(modelTypeInfo_ &info);
     Show *display;

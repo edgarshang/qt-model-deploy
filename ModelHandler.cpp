@@ -1,11 +1,14 @@
 #include "ModelHandler.h"
 #include <QDebug>
 #include "ort_tutorial.h"
+#include "uideploy.h"
 
-ModelHandler::ModelHandler(Show *imageDisplay)
+ModelHandler::ModelHandler(Deploy *imageDisplay)
 {
     display = imageDisplay;
+//    Deploy *uipter = dynamic_cast<Deploy *>(imageDisplay);
 //    connect(this, SIGNAL(finished()), this, SLOT(QObject::deleteLater));
+    connect(imageDisplay, &Deploy::onFrameReady, modelInference.get(), &ModelProcessor::FrameReady, Qt::AutoConnection);
 }
 
 
@@ -243,7 +246,7 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }else if( info.modelType == YOLOV5 || info.modelType == YOLOV8 || info.modelType == YOLOV11)
         {
-            modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s.engine" : (info.modelType == YOLOV8 ? "D:/project/ort-deploy/yolov8n.engine" : "D:/project/ort-deploy/yolov11n.engine"));
+            modelInfo.modelPath = (info.modelType == YOLOV5 ? "D:/project/ort-deploy/yolov5s-32.engine" : (info.modelType == YOLOV8 ? "D:/project/ort-deploy/yolov8n.engine" : "D:/project/ort-deploy/yolov11n.engine"));
             modelInfo.imagePath = info.filePath.toStdString();
             modelInfo.label_text = "D:/project/ort-deploy/classes.txt";
             modelInfo.modelType = info.modelType.toStdString();

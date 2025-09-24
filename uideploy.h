@@ -26,6 +26,9 @@ public:
     ~Deploy();
     void initSetting();
 
+public slots:
+    void onFrameReady(cv::Mat &image);
+
 public:
     virtual void imageshow(cv::Mat &image);
 

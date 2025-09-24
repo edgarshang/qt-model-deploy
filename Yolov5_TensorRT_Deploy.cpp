@@ -75,7 +75,9 @@ Yolov5_TensorRT_Deploy::Yolov5_TensorRT_Deploy(modelConfInfo_ info)
     m_context = m_cudaEngine->createExecutionContext();
 
     outputSize = 85*25200;
-    prob.resize(outputSize);
+//    prob.resize(outputSize);
+    cudaMallocHost(&prob, outputSize * sizeof(float));
+    cudaMallocHost(&inputHost, input_h* input_w * 3 * sizeof(float));
     cudaMalloc(&buffers[0], input_h* input_w * 3 * sizeof(float));
     cudaMalloc(&buffers[1], outputSize * sizeof(float));
 
@@ -111,6 +113,16 @@ Yolov5_TensorRT_Deploy::~Yolov5_TensorRT_Deploy()
 
     cudaStreamDestroy(stream);
 
+    if(inputHost != nullptr)
+    {
+        cudaFreeHost(inputHost);
+    }
+
+    if(prob != nullptr)
+    {
+        cudaFreeHost(prob);
+    }
+
 
 
 }
@@ -144,16 +156,17 @@ cv::Mat Yolov5_TensorRT_Deploy::pre_image_process(cv::Mat &image)
 void Yolov5_TensorRT_Deploy::run_model(cv::Mat &input_image)
 {
     start_time = cv::getTickCount();
-    cudaMemcpyAsync(buffers[0], input_image.ptr<float>(), input_h*input_w*3*sizeof(float), cudaMemcpyHostToDevice, stream);
+    memcpy(inputHost, input_image.ptr<float>(), input_h*input_w*3*sizeof(float));
+    cudaMemcpyAsync(buffers[0], inputHost, input_h*input_w*3*sizeof(float), cudaMemcpyHostToDevice, stream);
     m_context->enqueueV3(stream);
 }
 
 void Yolov5_TensorRT_Deploy::post_image_process(cv::Mat &inputimage)
 {
-    cudaMemcpyAsync(prob.data(), buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost, stream);
+    cudaMemcpyAsync(prob, buffers[1], outputSize*sizeof(float), cudaMemcpyDeviceToHost, stream);
 //    cudaStreamSynchronize(stream);
     end_time = cv::getTickCount();
-    float *pdata = prob.data();
+    float *pdata = prob;
     // 后处理 1x25200x85 85-box conf 80- min/max
     std::vector<cv::Rect> boxes;
     std::vector<int> classIds;
@@ -257,6 +270,8 @@ void Yolov5_TensorRT_Deploy::process()
                 cv::Mat model_input = this->pre_image_process(frame);
                 this->run_model(model_input);
                 this->post_image_process(frame);
+//                emit FrameReady(frame);
+//                qDebug() << "hell";
                 image_show->imageshow(frame);
                 if (cv::waitKey(delay) == 27) { // 按下 ESC 键退出
                     break;

@@ -9,6 +9,7 @@
 #include <NvOnnxParser.h>
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include <QObject>
 
 #define YOLOV5  "YOLOv5"
 #define YOLOV8  "YOLOv8"
@@ -69,6 +70,7 @@ class Show
 {
 public:
     virtual void imageshow(cv::Mat &image) = 0;
+
 };
 
 class ImageProcessor
@@ -77,14 +79,18 @@ public:
     virtual void processor(modelTypeInfo_ &info) = 0;
 };
 
-class ModelProcessor
+class ModelProcessor : public QObject
 {
+    Q_OBJECT
 public:
     virtual void modelRunner() = 0;
     virtual void modelStop()
     {
 
     }
+
+signals:
+    void FrameReady(cv::Mat &iamge);
 };
 
 
