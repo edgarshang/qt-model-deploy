@@ -99,16 +99,29 @@ QWidget& Deploy::uiStackWidgetInit()
     vbox->addStretch(1);
     DeployModelTypeGroupBox->setLayout(vbox);
 
+
+    QGroupBox *videoModeGroupBox = new QGroupBox(tr("videoMode"));
+    opencvRadioBtn = new QRadioButton(tr("&opencv"));
+    ffmpegRadioBtn = new QRadioButton(tr("&ffmpeg"));
+
+    QVBoxLayout *videoBox = new QVBoxLayout;
+    videoBox->addWidget(opencvRadioBtn);
+    videoBox->addWidget(ffmpegRadioBtn);
+    videoBox->addStretch(1);
+    videoModeGroupBox->setLayout(videoBox);
+
+
     QVBoxLayout *configLayout = new QVBoxLayout;
     configLayout->addLayout(pathLayout);
     configLayout->addLayout(scoredLayout);
     configLayout->addLayout(confLayout);
     configLayout->addWidget(DeployModelTypeGroupBox);
+    configLayout->addWidget(videoModeGroupBox);
     configLayout->addStretch(1);
     stackWidgetGroup.setLayout(configLayout);
 
-
-    onnxruntimeRadioBtn->setChecked(true);
+    tensorRtRadioBtn->setChecked(true);
+    opencvRadioBtn->setChecked(true);
 
     return stackWidgetGroup;
 
@@ -155,6 +168,7 @@ void Deploy::onPushButtonClick()
         modelTypeInfo.deploymode = onnxruntimeRadioBtn->isChecked() ? OnnxRunTime : (opvinoRadioBtn->isChecked() ? Openvino : TensorRT);
         modelTypeInfo.scores = this->scoresThresholdEdit->text().toFloat();
         modelTypeInfo.conf = this->confThresholdEdit->text().toFloat();
+        modelTypeInfo.vedioTypeMode = opencvRadioBtn->isChecked() ? OpenCV : FFmpeg;
 //        qDebug() << modelTypeInfo.modelType;
 //        qDebug() << modelTypeInfo.deploymode;
 //        qDebug() << modelTypeInfo.filePath;

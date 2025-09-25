@@ -51,6 +51,13 @@ public:
         display = show;
     }
 
+    void init();
+
+    void show()
+    {
+        this->m_ui.show();
+    }
+
 //    ort_tutorial *ort_test;
     std::shared_ptr<ort_tutorial> ort_test;
     std::shared_ptr<Yolov5_Onnx_Deploy> yolov5_onnx_deploy;

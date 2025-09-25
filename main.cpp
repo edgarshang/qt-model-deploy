@@ -18,12 +18,10 @@ int main(int argc, char *argv[])
 
 
     ModelHandler modelHandle;
-    modelHandle.setDisplayer(&modelHandle.m_ui);
-    modelHandle.m_ui.setImageProcesser(&modelHandle);
-//    w.setImageProcesser(&modelHandle);
 
-//    w.show();
-    modelHandle.m_ui.show();
+    modelHandle.init();
+    modelHandle.show();
     ret = a.exec();
+
     return ret;
 }

@@ -34,6 +34,7 @@ class Logger : public ILogger
 
 
 enum DeployMode { OnnxRunTime, Openvino, TensorRT };
+enum VedioMode {OpenCV, FFmpeg};
 typedef struct
 {
     QString modelType;
@@ -41,6 +42,7 @@ typedef struct
     DeployMode deploymode;
     float scores;
     float conf;
+    VedioMode vedioTypeMode;
 
 }modelTypeInfo_;
 

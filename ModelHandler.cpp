@@ -13,6 +13,12 @@ ModelHandler::ModelHandler()
 }
 
 
+void ModelHandler::init()
+{
+    this->m_ui.setImageProcesser(this);
+    this->setDisplayer(&m_ui);
+}
+
 void ModelHandler::processor(modelTypeInfo_ &info)
 {
     qDebug() << "info.modeyType: " << info.modelType;

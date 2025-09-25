@@ -47,6 +47,9 @@ public: // button
     QRadioButton *opvinoRadioBtn;
     QRadioButton *tensorRtRadioBtn;
 
+    QRadioButton *opencvRadioBtn;
+    QRadioButton *ffmpegRadioBtn;
+
     modelTypeInfo_ modelTypeInfo;
 
 public slots:
