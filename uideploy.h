@@ -25,10 +25,6 @@ public:
     Deploy(QWidget *parent = 0);
     ~Deploy();
     void initSetting();
-
-public slots:
-    void onFrameReady(cv::Mat &image);
-
 public:
     virtual void imageshow(cv::Mat &image);
 
@@ -55,6 +51,7 @@ public: // button
 
 public slots:
     void onPushButtonClick();
+    void onFrameReady(cv::Mat &image);
 public:
     QListWidget leftModeListWidget;
 

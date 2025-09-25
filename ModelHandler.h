@@ -42,10 +42,14 @@ class ModelHandler : public QThread,  public ImageProcessor
 {
     Q_OBJECT
 public:
-    ModelHandler(Deploy *imageDisplay);
+    ModelHandler();
     ~ModelHandler();
     virtual void processor(modelTypeInfo_ &info);
     Show *display;
+    void setDisplayer(Show* show)
+    {
+        display = show;
+    }
 
 //    ort_tutorial *ort_test;
     std::shared_ptr<ort_tutorial> ort_test;
@@ -80,6 +84,8 @@ public:
 
 
     modelConfInfo_ modelInfo;
+
+    Deploy m_ui;
 
 protected:
     void run();

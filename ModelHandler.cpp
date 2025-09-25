@@ -3,12 +3,13 @@
 #include "ort_tutorial.h"
 #include "uideploy.h"
 
-ModelHandler::ModelHandler(Deploy *imageDisplay)
+ModelHandler::ModelHandler()
 {
-    display = imageDisplay;
+//    display = imageDisplay;
 //    Deploy *uipter = dynamic_cast<Deploy *>(imageDisplay);
 //    connect(this, SIGNAL(finished()), this, SLOT(QObject::deleteLater));
-    connect(imageDisplay, &Deploy::onFrameReady, modelInference.get(), &ModelProcessor::FrameReady, Qt::AutoConnection);
+//    connect(imageDisplay, &Deploy::onFrameReady, modelInference.get(), &ModelProcessor::FrameReady, Qt::QueuedConnection);
+//    connect(modelInference.get(), &ModelProcessor::FrameReady,imageDisplay, &Deploy::onFrameReady,  Qt::QueuedConnection);
 }
 
 
