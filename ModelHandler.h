@@ -38,6 +38,7 @@
 #include "uideploy.h"
 
 
+
 class ModelHandler : public QThread,  public ImageProcessor
 {
     Q_OBJECT
@@ -57,6 +58,8 @@ public:
     {
         this->m_ui.show();
     }
+
+    DeCode* frameDecoder = nullptr;
 
 //    ort_tutorial *ort_test;
     std::shared_ptr<ort_tutorial> ort_test;

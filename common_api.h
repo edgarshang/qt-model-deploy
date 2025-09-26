@@ -95,6 +95,22 @@ signals:
     void FrameReady(cv::Mat &iamge);
 };
 
+class DeCode : public QObject
+{
+    Q_OBJECT
+public:
+    virtual void deCodeImage() = 0;
+    DeCode(QString path):QObject(nullptr)
+    {
+        videoPath = path;
+    }
+signals:
+    void frameReady(cv::Mat &frame);
+
+public:
+    QString videoPath;
+};
+
 
 
 

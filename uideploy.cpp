@@ -32,17 +32,15 @@ void Deploy::uiInit()
 
 void Deploy::imageshow(cv::Mat &image)
 {
-    Q_UNUSED(image);
+//    Q_UNUSED(image);
     QImage dst(image.data, image.cols, image.rows, static_cast<int>(image.step), QImage::Format::Format_RGB888);
     QshowLabel.setPixmap(QPixmap::fromImage(dst.rgbSwapped()));
 }
 
 void Deploy::onFrameReady(cv::Mat &image)
 {
-//   Q_UNUSED(image);
-    qDebug() << "hello";
-    QImage dst(image.data, image.cols, image.rows, static_cast<int>(image.step), QImage::Format::Format_RGB888);
-    QshowLabel.setPixmap(QPixmap::fromImage(dst.rgbSwapped()));
+//    QImage dst(image.data, image.cols, image.rows, static_cast<int>(image.step), QImage::Format::Format_RGB888);
+//    QshowLabel.setPixmap(QPixmap::fromImage(dst.rgbSwapped()));
 //
 }
 

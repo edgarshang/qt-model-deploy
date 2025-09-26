@@ -2,14 +2,13 @@
 #include <QDebug>
 #include "ort_tutorial.h"
 #include "uideploy.h"
+#include "OpenCV.h"
 
 ModelHandler::ModelHandler()
 {
-//    display = imageDisplay;
-//    Deploy *uipter = dynamic_cast<Deploy *>(imageDisplay);
-//    connect(this, SIGNAL(finished()), this, SLOT(QObject::deleteLater));
-//    connect(imageDisplay, &Deploy::onFrameReady, modelInference.get(), &ModelProcessor::FrameReady, Qt::QueuedConnection);
-//    connect(modelInference.get(), &ModelProcessor::FrameReady,imageDisplay, &Deploy::onFrameReady,  Qt::QueuedConnection);
+    qRegisterMetaType<cv::Mat>("cv::Mat");
+     qRegisterMetaType<cv::Mat>("cv::Mat&");
+      qDebug() << "主线程线程ID:" << QThread::currentThreadId();
 }
 
 
@@ -22,6 +21,20 @@ void ModelHandler::init()
 void ModelHandler::processor(modelTypeInfo_ &info)
 {
     qDebug() << "info.modeyType: " << info.modelType;
+    qDebug() << "info.vedioTypeMode" <<  info.vedioTypeMode;
+    if(info.vedioTypeMode == OpenCV)
+    {
+        qDebug() << "OpenCV Decode";
+        frameDecoder = new OpenCVDecoder(info.filePath);
+        connect(frameDecoder, &DeCode::frameReady, &m_ui, &Deploy::onFrameReady);
+        frameDecoder->deCodeImage();
+
+    }else
+    {
+        qDebug() << "ffmpeg Decode";
+    }
+
+
     if( info.deploymode == OnnxRunTime)
     {
         qDebug() << "onnxruntime";
@@ -360,6 +373,7 @@ ModelHandler::~ModelHandler()
 
 void ModelHandler::run()
 {
+    qDebug() << "推理线程线程ID:" << QThread::currentThreadId();
     if(modelInference != nullptr)
     {
         modelInference->modelRunner();
