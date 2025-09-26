@@ -27,6 +27,11 @@ void ModelHandler::processor(modelTypeInfo_ &info)
         qDebug() << "OpenCV Decode";
         frameDecoder = new OpenCVDecoder(info.filePath);
         connect(frameDecoder, &DeCode::frameReady, &m_ui, &Deploy::onFrameReady);
+        if(info.modelType == YOLOV5)
+        {
+             infer = new Yolov5_TensorRT_Deploy("D:/project/ort-deploy/yolov5s-32.engine", "D:/project/ort-deploy/classes.txt");
+             frameDecoder->setModel(infer);
+        }
         frameDecoder->deCodeImage();
 
     }else
@@ -35,6 +40,8 @@ void ModelHandler::processor(modelTypeInfo_ &info)
     }
 
 
+
+#if 0
     if( info.deploymode == OnnxRunTime)
     {
         qDebug() << "onnxruntime";
@@ -358,6 +365,7 @@ void ModelHandler::processor(modelTypeInfo_ &info)
             this->start();
         }
     }
+#endif
 }
 
 ModelHandler::~ModelHandler()

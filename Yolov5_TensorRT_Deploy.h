@@ -15,6 +15,7 @@ class Yolov5_TensorRT_Deploy : public ModelProcessor
 {
 public:
     Yolov5_TensorRT_Deploy(modelConfInfo_ info);
+    Yolov5_TensorRT_Deploy(QString model, QString label);
     ~Yolov5_TensorRT_Deploy();
     void get_model_info();
     cv::Mat pre_image_process(cv::Mat &image);
@@ -28,11 +29,13 @@ public:
     virtual void modelRunner();
     virtual void modelStop();
 
+    virtual void inference(cv::Mat &frame);
+
 private:
     std::string model_path;
     std::string image_path;
     std::string label_path;
-    std::string model;
+    std::string model = YOLOV5;
     std::vector<std::string> labels;
 
 

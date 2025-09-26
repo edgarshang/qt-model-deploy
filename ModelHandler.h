@@ -97,6 +97,8 @@ public:
 
     Deploy m_ui;
 
+    ModelProcessor *infer = nullptr;
+
 protected:
     void run();
 };

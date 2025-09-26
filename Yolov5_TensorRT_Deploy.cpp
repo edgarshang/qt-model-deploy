@@ -6,7 +6,79 @@ using namespace nvinfer1;
 using namespace nvonnxparser;
 using namespace cv;
 
+Yolov5_TensorRT_Deploy::Yolov5_TensorRT_Deploy(QString model, QString label):ModelProcessor(model, label)
+{
+    labels = Common_API::readClassNames(labelTextPath.toStdString());
+    model_path = modelPath.toStdString();
 
+    m_builder = createInferBuilder(m_loger);
+    m_builder->getLogger()->log(nvinfer1::ILogger::Severity::kERROR, "Create Builder...");
+    int size = Common_API::load_tensorRT_model(&trtModeStream, model_path.c_str());
+    m_runtime = createInferRuntime(m_loger);
+    m_cudaEngine = m_runtime->deserializeCudaEngine(trtModeStream, size);
+    int numIOTensors = m_cudaEngine->getNbIOTensors();
+    printf("the size is ^%d\n", numIOTensors);
+
+    for (int i = 0; i < numIOTensors; i++)
+    {
+        const char* tensorName = m_cudaEngine->getIOTensorName(i);
+        nvinfer1::TensorIOMode ioMode = m_cudaEngine->getTensorIOMode(tensorName);
+//        std::cout << "the name is " << tensorName;
+//        std::cout << " Tensor I/O Mode : " << (ioMode == nvinfer1::TensorIOMode::kINPUT ? "Input" : "Output") << std::endl;
+
+        nvinfer1::Dims tensorDims = m_cudaEngine->getTensorShape(tensorName); // 获取张量维度
+//        std::cout << "Tensor Dimensions: ";
+        if(ioMode == nvinfer1::TensorIOMode::kINPUT)
+        {
+            for (int j = 0; j < tensorDims.nbDims; j++)
+            {
+                std::cout << tensorDims.d[j] << " ";   // 打印出张量维度
+                if(j == 2)
+                {
+                    input_h = tensorDims.d[j];
+                }else if(j == 3)
+                {
+                    input_w = tensorDims.d[j];
+                }
+            }
+        }else if(ioMode == nvinfer1::TensorIOMode::kOUTPUT)
+        {
+            for (int j = 0; j < tensorDims.nbDims; j++)
+            {
+                std::cout << tensorDims.d[j] << " ";   // 打印出张量维度
+                if(j == 1)
+                {
+                    out_num = tensorDims.d[j];
+                }else if(j == 2)
+                {
+                    out_ch = tensorDims.d[j];
+                }
+
+
+            }
+        }
+
+
+        std::cout << std::endl;
+    }
+
+    std::cout << "create the context: " << std::endl;
+    // 创建执行上下文
+    m_context = m_cudaEngine->createExecutionContext();
+
+    outputSize = 85*25200;
+//    prob.resize(outputSize);
+    cudaMallocHost(&prob, outputSize * sizeof(float));
+    cudaMallocHost(&inputHost, input_h* input_w * 3 * sizeof(float));
+    cudaMalloc(&buffers[0], input_h* input_w * 3 * sizeof(float));
+    cudaMalloc(&buffers[1], outputSize * sizeof(float));
+
+    m_context->setTensorAddress("images", buffers[0]);
+    m_context->setTensorAddress("output0", buffers[1]);
+
+    cudaStreamCreate(&stream);
+
+}
 
 Yolov5_TensorRT_Deploy::Yolov5_TensorRT_Deploy(modelConfInfo_ info)
 {
@@ -86,6 +158,13 @@ Yolov5_TensorRT_Deploy::Yolov5_TensorRT_Deploy(modelConfInfo_ info)
 
     cudaStreamCreate(&stream);
 
+}
+
+void Yolov5_TensorRT_Deploy::inference(cv::Mat &frame)
+{
+    cv::Mat model_input = this->pre_image_process(frame);
+    this->run_model(model_input);
+    this->post_image_process(frame);
 }
 
 Yolov5_TensorRT_Deploy::~Yolov5_TensorRT_Deploy()

@@ -85,8 +85,24 @@ class ModelProcessor : public QObject
 {
     Q_OBJECT
 public:
+    ModelProcessor()
+    {
+
+    }
+
+    ModelProcessor(QString model, QString labelText):modelPath(model), labelTextPath(labelText)
+    {
+
+    }
+    QString modelPath;
+    QString labelTextPath;
     virtual void modelRunner() = 0;
     virtual void modelStop()
+    {
+
+    }
+
+    virtual void inference(cv::Mat &frame)
     {
 
     }
@@ -103,6 +119,11 @@ public:
     DeCode(QString path):QObject(nullptr)
     {
         videoPath = path;
+    }
+    ModelProcessor *ModelInfer = nullptr;
+    void setModel(ModelProcessor *infer)
+    {
+        ModelInfer = infer;
     }
 signals:
     void frameReady(cv::Mat &frame);

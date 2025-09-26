@@ -27,8 +27,15 @@ void OpenCVDecoder::onOpenVideo(QString path)
         m_cap >> frame;
         while(!frame.empty())
         {
-            emit frameReady(frame);
+            // call the inference function
+            if(ModelInfer)
+            {
+                ModelInfer->inference(frame);
+            }
+
             // call the shower
+            emit frameReady(frame);
+
             int delay = static_cast<int>(1000/fps);
             QThread::msleep(delay);
             m_cap >> frame;
