@@ -127,9 +127,12 @@ public:
     }
 signals:
     void frameReady(cv::Mat &frame);
+    void openVideoThread(QString path);
 
 public:
     QString videoPath;
+protected:
+     QThread *m_workThread = nullptr;
 };
 
 

@@ -6,7 +6,7 @@ OpenCVDecoder::OpenCVDecoder(QString videoPath): DeCode(videoPath)
     qDebug() << "OpenCV instruct";
     m_workThread = new QThread();
     this->moveToThread(m_workThread);
-    connect(this, &OpenCVDecoder::openVideoThread, this, &OpenCVDecoder::onOpenVideo, Qt::QueuedConnection);
+    connect(this, &DeCode::openVideoThread, this, &OpenCVDecoder::onOpenVideo, Qt::QueuedConnection);
 
     m_workThread->start();
 }

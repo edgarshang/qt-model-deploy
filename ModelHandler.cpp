@@ -3,6 +3,7 @@
 #include "ort_tutorial.h"
 #include "uideploy.h"
 #include "OpenCV.h"
+#include "FFmpeg.h"
 
 ModelHandler::ModelHandler()
 {
@@ -22,22 +23,27 @@ void ModelHandler::processor(modelTypeInfo_ &info)
 {
     qDebug() << "info.modeyType: " << info.modelType;
     qDebug() << "info.vedioTypeMode" <<  info.vedioTypeMode;
+    if(info.modelType == YOLOV5)
+    {
+         infer = new Yolov5_TensorRT_Deploy("D:/project/ort-deploy/yolov5s-32.engine", "D:/project/ort-deploy/classes.txt");
+//         frameDecoder->setModel(infer);
+    }
     if(info.vedioTypeMode == OpenCV)
     {
         qDebug() << "OpenCV Decode";
         frameDecoder = new OpenCVDecoder(info.filePath);
-        connect(frameDecoder, &DeCode::frameReady, &m_ui, &Deploy::onFrameReady);
-        if(info.modelType == YOLOV5)
-        {
-             infer = new Yolov5_TensorRT_Deploy("D:/project/ort-deploy/yolov5s-32.engine", "D:/project/ort-deploy/classes.txt");
-             frameDecoder->setModel(infer);
-        }
-        frameDecoder->deCodeImage();
+
+
 
     }else
     {
         qDebug() << "ffmpeg Decode";
+        frameDecoder = new FFmpegDecoder(info.filePath);
     }
+     frameDecoder->setModel(infer);
+     connect(frameDecoder, &DeCode::frameReady, &m_ui, &Deploy::onFrameReady);
+     frameDecoder->deCodeImage();
+
 
 
 

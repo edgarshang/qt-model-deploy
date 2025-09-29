@@ -12,16 +12,13 @@ public:
     OpenCVDecoder(QString videoPath);
     virtual void deCodeImage() override;
 
-signals:
-    void openVideoThread(QString path);
-
 private slots:
     void onOpenVideo(QString path);
 
 private:
     cv::VideoCapture m_cap;
     bool m_isOpend = false;
-    QThread *m_workThread = nullptr;
+
 };
 
 #endif // OPENCV_H

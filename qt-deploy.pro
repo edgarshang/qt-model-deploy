@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     DeepLabV3_TensorRT.cpp \
+    FFmpeg.cpp \
     MaskRcnn_Seg_TensorRT.cpp \
     OpenCV.cpp \
     TensorRTInferMange.cpp \
@@ -62,6 +63,7 @@ SOURCES += \
 
 HEADERS += \
     DeepLabV3_TensorRT.h \
+    FFmpeg.h \
     MaskRcnn_Seg_TensorRT.h \
     OpenCV.h \
     TensorRTInferMange.h \
@@ -106,6 +108,11 @@ INCLUDEPATH += $$quote(D:\project\OpenCV\opencvcode\build\include) \
                $$quote(D:\project\onnxruntime-win-x64-1.13.1\include) \
                $$quote(D:\software-pack\TensorRT-10.6.0.26.Windows.win10.cuda-12.6\TensorRT-10.6.0.26\include) \
                $$quote(C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.4\include)
+
+INCLUDEPATH += $$quote(D:\appSoftware\ffmpeg-6.1-full_build-shared\include)
+
+LIBS += -L$$quote(D:\appSoftware\ffmpeg-6.1-full_build-shared\lib) \
+        -lavformat -lavfilter -lavcodec -lswresample -lswscale -lavutil
 
 LIBS += -L$$quote(D:\project\OpenCV\opencvcode\build\x64\vc15\lib) \
         -lopencv_world454
