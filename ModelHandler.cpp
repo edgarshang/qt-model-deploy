@@ -7,15 +7,15 @@
 ModelHandler::ModelHandler()
 {
     qRegisterMetaType<cv::Mat>("cv::Mat");
-     qRegisterMetaType<cv::Mat>("cv::Mat&");
-      qDebug() << "主线程线程ID:" << QThread::currentThreadId();
+    qRegisterMetaType<cv::Mat>("cv::Mat&");
+    qDebug() << "主线程线程ID:" << QThread::currentThreadId();
 }
 
 
 void ModelHandler::init()
 {
     this->m_ui.setImageProcesser(this);
-    this->setDisplayer(&m_ui);
+//    this->setDisplayer(&m_ui);
 }
 
 void ModelHandler::processor(modelTypeInfo_ &info)
@@ -371,19 +371,19 @@ void ModelHandler::processor(modelTypeInfo_ &info)
 ModelHandler::~ModelHandler()
 {
     qDebug() << "~ModelHandler()";
-    if(modelInference != nullptr)
-    {
-        modelInference->modelStop();
-    }
-    quit();
-    wait();
+//    if(modelInference != nullptr)
+//    {
+//        modelInference->modelStop();
+//    }
+//    quit();
+//    wait();
 }
 
 void ModelHandler::run()
 {
-    qDebug() << "推理线程线程ID:" << QThread::currentThreadId();
-    if(modelInference != nullptr)
-    {
-        modelInference->modelRunner();
-    }
+//    qDebug() << "推理线程线程ID:" << QThread::currentThreadId();
+//    if(modelInference != nullptr)
+//    {
+//        modelInference->modelRunner();
+//    }
 }

@@ -67,14 +67,14 @@ public:
 
 
 public:
-    QVBoxLayout buttonLayout;
+//    QVBoxLayout buttonLayout;
 
 public:
     QTabWidget showTabWidget;
     QLabel QshowLabel;
 
 public:
-    QHBoxLayout uilayout;
+//    QHBoxLayout uilayout;
 
 public:
     ImageProcessor *imageProcess;

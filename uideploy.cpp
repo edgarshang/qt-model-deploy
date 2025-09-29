@@ -19,13 +19,14 @@ Deploy::Deploy(QWidget *parent)
 
 void Deploy::uiInit()
 {
-      uilayout.addWidget(&uileftModelInit());
-      uilayout.addWidget(&uiStackWidgetInit());
-      uilayout.addLayout(&uiButtonInit());
-      uilayout.addStretch(1);
-      uilayout.addLayout(&uiShowInit());
-//      uilayout.addStretch(1);
-      setLayout(&uilayout);
+      QHBoxLayout *uilayout = new QHBoxLayout(this);
+      uilayout->addWidget(&uileftModelInit());
+      uilayout->addWidget(&uiStackWidgetInit());
+      uilayout->addLayout(&uiButtonInit());
+      uilayout->addStretch(1);
+      uilayout->addLayout(&uiShowInit());
+////      uilayout.addStretch(1);
+      setLayout(uilayout);
 
       initSetting();
 }
@@ -73,15 +74,15 @@ QWidget& Deploy::uiStackWidgetInit()
 
 
 
-    QHBoxLayout *pathLayout = new QHBoxLayout;
+    QHBoxLayout *pathLayout = new QHBoxLayout();
     pathLayout->addWidget(pathLabel);
     pathLayout->addWidget(pathLineEdit);
 
-    QHBoxLayout *scoredLayout = new QHBoxLayout;
+    QHBoxLayout *scoredLayout = new QHBoxLayout();
     scoredLayout->addWidget(scoredLabel);
     scoredLayout->addWidget(scoresThresholdEdit);
 
-    QHBoxLayout *confLayout = new QHBoxLayout;
+    QHBoxLayout *confLayout = new QHBoxLayout();
     confLayout->addWidget(confLabel);
     confLayout->addWidget(confThresholdEdit);
 
@@ -90,7 +91,7 @@ QWidget& Deploy::uiStackWidgetInit()
     opvinoRadioBtn      = new QRadioButton(tr("&openvino"));
     tensorRtRadioBtn    = new QRadioButton(tr("&TensorRt"));
 
-    QVBoxLayout *vbox = new QVBoxLayout;
+    QVBoxLayout *vbox = new QVBoxLayout();
     vbox->addWidget(onnxruntimeRadioBtn);
     vbox->addWidget(opvinoRadioBtn);
     vbox->addWidget(tensorRtRadioBtn);
@@ -102,14 +103,14 @@ QWidget& Deploy::uiStackWidgetInit()
     opencvRadioBtn = new QRadioButton(tr("&opencv"));
     ffmpegRadioBtn = new QRadioButton(tr("&ffmpeg"));
 
-    QVBoxLayout *videoBox = new QVBoxLayout;
+    QVBoxLayout *videoBox = new QVBoxLayout();
     videoBox->addWidget(opencvRadioBtn);
     videoBox->addWidget(ffmpegRadioBtn);
     videoBox->addStretch(1);
     videoModeGroupBox->setLayout(videoBox);
 
 
-    QVBoxLayout *configLayout = new QVBoxLayout;
+    QVBoxLayout *configLayout = new QVBoxLayout();
     configLayout->addLayout(pathLayout);
     configLayout->addLayout(scoredLayout);
     configLayout->addLayout(confLayout);
@@ -128,17 +129,18 @@ QWidget& Deploy::uiStackWidgetInit()
 
 QLayout& Deploy::uiButtonInit()
 {
-    openfileButton = new QPushButton("Openfile");
-    RunButton = new QPushButton("Run");
+    QVBoxLayout *buttonLayout = new QVBoxLayout();
+    openfileButton = new QPushButton("Openfile", this);
+    RunButton = new QPushButton("Run", this);
 
-    buttonLayout.addWidget(openfileButton);
-    buttonLayout.addWidget(RunButton);
-    buttonLayout.addStretch(1);
+    buttonLayout->addWidget(openfileButton);
+    buttonLayout->addWidget(RunButton);
+    buttonLayout->addStretch(1);
 
     connect(openfileButton, SIGNAL(clicked(bool)), this, SLOT(onPushButtonClick()));
     connect(RunButton, SIGNAL(clicked(bool)), this, SLOT(onPushButtonClick()));
 
-    return buttonLayout;
+    return *buttonLayout;
 }
 
 void Deploy::onPushButtonClick()
@@ -209,10 +211,10 @@ QLayout& Deploy::uiShowInit()
 
 Deploy::~Deploy()
 {
-    delete openfileButton;
-    delete RunButton;
-    delete pathLineEdit;
-    delete onnxruntimeRadioBtn;
-    delete opvinoRadioBtn;
+//    delete openfileButton;
+//    delete RunButton;
+//    delete pathLineEdit;
+//    delete onnxruntimeRadioBtn;
+//    delete opvinoRadioBtn;
 
 }
