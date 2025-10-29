@@ -33,7 +33,7 @@ void Deploy::uiInit()
 
 void Deploy::imageshow(cv::Mat &image)
 {
-//    Q_UNUSED(image);
+    Q_UNUSED(image);
 //    QImage dst(image.data, image.cols, image.rows, static_cast<int>(image.step), QImage::Format::Format_RGB888);
 //    QshowLabel.setPixmap(QPixmap::fromImage(dst.rgbSwapped()));
 }
@@ -48,7 +48,7 @@ void Deploy::onFrameReady(cv::Mat &image)
 QWidget& Deploy::uileftModelInit()
 {
 
-    for(int i = 0; i < sizeof(modetye)/sizeof(modetye[0]); i++)
+    for(uint i = 0; i < sizeof(modetye)/sizeof(modetye[0]); i++)
     {
         leftModeListWidget.insertItem(i, modetye[i]);
     }
